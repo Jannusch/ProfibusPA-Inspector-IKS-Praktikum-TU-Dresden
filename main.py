@@ -16,6 +16,11 @@ if int(index) < 10:
 index = bytes.fromhex(index)
 
 print(f"09{address}{socket_addr}{index}")
+
+
 a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=b'\x09' + address + socket_addr + index) # 09 -> keine Ahnung; 06 -> Adresse; 00 -> socket; 01 -> index
-# a.show()
-send(a)
+
+awnser = sr1(a)
+awnser.show()
+
+payload = bytes(awnser[Raw]).hex()
