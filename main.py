@@ -35,9 +35,17 @@ def request(param_list):
     answer.show()
 
     # convert "raw" answer to readble hex values
-    payload = bytes(answer[Raw]).hex()
-    print(payload)
+    raw_payload = bytes(answer[Raw])
+    print(raw_payload.hex())
+    print(str(bin(bits_from_bytes(raw_payload, 0, 8))))
 
+# get specific bits from an byte object
+def bits_from_bytes(bytes_object, index, number):
+    # with help and optimizations from https://stackoverflow.com/a/20910950
+    mask = 2 ** number - 1
+    value = int.from_bytes(bytes_object, byteorder='big')
+    
+    return value >> (len(bytes_object) * 8 - (index + number)) & mask
 
 if __name__ == "__main__":
     
