@@ -37,15 +37,25 @@ def request(param_list):
     # convert "raw" answer to readble hex values
     raw_payload = bytes(answer[Raw])
     print(raw_payload.hex())
-    print(str(bin(bits_from_bytes(raw_payload, 0, 8))))
+
+    bitstring = bytes_to_bitstring(raw_payload)
+    print(bitstring[0:8]) # Framemarker
+    print(hex(bitstring_to_int(bitstring[0:8]))) # Framemarker but in hex
 
 # get specific bits from an byte object
-def bits_from_bytes(bytes_object, index, number):
+"""def bits_from_bytes(bytes_object, index, number):
     # with help and optimizations from https://stackoverflow.com/a/20910950
     mask = 2 ** number - 1
     value = int.from_bytes(bytes_object, byteorder='big')
     
-    return value >> (len(bytes_object) * 8 - (index + number)) & mask
+    return value >> (len(bytes_object) * 8 - (index + number)) & mask"""
+
+def bytes_to_bitstring(b) -> str:
+    bitstring = str(bin(int.from_bytes(b, byteorder='big')))[2:]
+    return bitstring.rjust(len(b)*8, "0")
+
+def bitstring_to_int(bs: str) -> int:
+    return int(bs, 2)
 
 if __name__ == "__main__":
     
