@@ -44,8 +44,8 @@ def request(param_list):
     print(hex(bitstring_to_int(bitstring[0:8]))) # Framemarker but in hex
     print("\nBegin PB")
     print(bitstring[8:24])
-    print(bitstring_to_int(bitstring[8:24]))
-    print("unit16: " + str(int('0105', 16)))
+    print(hex(bitstring_to_int(bitstring[8:24])))
+    print("unit16: " + str(int('0104', 16)))
     print("No PB")
     print(bitstring[24:40])
     print(bitstring_to_int(bitstring[24:40]))
