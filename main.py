@@ -39,8 +39,35 @@ def request(param_list):
     print(raw_payload.hex())
 
     bitstring = bytes_to_bitstring(raw_payload)
+    print("Framemarker")
     print(bitstring[0:8]) # Framemarker
     print(hex(bitstring_to_int(bitstring[0:8]))) # Framemarker but in hex
+    print("\nBegin PB")
+    print(bitstring[8:24])
+    print(bitstring_to_int(bitstring[8:24]))
+    print("unit16: " + str(int('0105', 16)))
+    print("No PB")
+    print(bitstring[24:40])
+    print(bitstring_to_int(bitstring[24:40]))
+
+    
+    print("\nBegin TB")
+    print(bitstring[40:56])
+    print(hex(bitstring_to_int(bitstring[40:56])))
+    print("unint16: " + str(int('0105', 16)))
+    print("No TB")
+    print(bitstring[56:72])
+    print(hex(bitstring_to_int(bitstring[56:72])))
+
+
+    print("\nBegin FB")
+    print(bitstring[72:88])
+    print(hex(bitstring_to_int(bitstring[72:88])))
+    print("unit16: " + str(int('0107', 16)))
+    print("No FB")
+    print(bitstring[88:104])
+    print(hex(bitstring_to_int(bitstring[88:104])))
+
 
 # get specific bits from an byte object
 """def bits_from_bytes(bytes_object, index, number):
