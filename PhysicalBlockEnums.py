@@ -9,15 +9,7 @@ class PhysicalBlockParentClass(IntEnum):
     CONTROLLER = 4
     ANALYSER = 5
     LAB_DEVICE = 6
-    RESERVED = 7
     MULTI_VARIABLE = 127
-
-    @classmethod
-    def _missing_(cls, value):
-        if 7 <= value <= 126:
-            return PhysicalBlockParentClass.RESERVED
-        else:
-            raise ValueError()
 
 
 class PhysicalBlock(Block):

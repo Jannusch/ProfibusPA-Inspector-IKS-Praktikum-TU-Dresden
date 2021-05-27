@@ -1,4 +1,4 @@
-from TransducerBlockEnum import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockParentClass
+from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockParentClass
 from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockParentClass
 from PhysicalBlockEnums import PhysicalBlockParentClass
 from utils import bitstring_to_int
