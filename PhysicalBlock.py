@@ -7,7 +7,7 @@ class PhysicalBlock(GenericBlock):
 
     def __init__(self, bytz):
         super(bytz)
-        
+
         if(self.block_object_byte != 1): 
             raise ValueError("Block Object must be 0x01 in Physical Block! (got {})".format(self.block_object_byte))
         if(self.class_byte != 250): 
@@ -32,4 +32,4 @@ class PhysicalBlockParentClass(IntEnum):
         if(7 <= value <= 126):
             return PhysicalBlockParentClass.RESERVED
         else:
-            raise ValueError
+            raise ValueError()
