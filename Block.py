@@ -13,14 +13,18 @@ class BlockType(IntEnum):
 
 class Block:
 
-    def __init__(self, bytz):
+    def __init__(self, bytz, type="bit"):
         # got hex string
-        if isinstance(bytz, str) and bytz.find("0x") == 0:
-            self.raw_bytes_s = [char for char in bytz[2:].rjust(40, "0")]
+        if type == "hex" and isinstance(bytz, str) and len(bytz) == 20*2:
+            self.raw_bytes_s = [char for char in bytz]
         # got bitstring
-        elif isinstance(bytz, str):
+        elif type == "bit" and isinstance(bytz, str) and len(bytz) == 20*8:
             bytz = bitstring_to_int(bytz)
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
+        # got list
+        elif type == "list" and isinstance(bytz, list) and len(bytz) == 20:
+            self.raw_bytes_s = ""
+            for i in range(20): self.raw_bytes_s = self.raw_bytes_s + hex(bytz[i])[2:].rjust(2, "0")
         # got integer
         elif isinstance(bytz, int):
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
