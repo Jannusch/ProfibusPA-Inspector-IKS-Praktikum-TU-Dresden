@@ -127,20 +127,6 @@ if __name__ == "__main__":
     device = Device()
     device.address = 6 # int(input("Pleas enter the address: ")) 
 
-    # default param list for pressure sensor
-    param_list = {
-        # cretas frammarker with random offset
-        "framemarker": bytes([(0xff & random.randint(0x00, 0xff))]),
-        # address for the device ABB Pressure sensor: 06; ABB Temp sensor 07
-        "address": bytes([0x06]),
-        "slot": bytes([0x01]),
-        "index": bytes([0x00])
-    }
-
-    # if there is an optional cli arg you will be asked for the param_list values
-    if len(sys.argv) > 1:
-        param_list = read_params(param_list)
-
     # make request
     # request(param_list)
     device.request_header()
