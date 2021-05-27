@@ -13,10 +13,13 @@ class Device:
         # composit list directory entrie
         self.begin_pb = 0
         self.no_pb = 0
+        self.slot_index_pb = []
         self.begin_tb = 0
         self.no_tb = 0
+        self.slot_index_tb = {"slot": 0, "index": 0, "number": 0}
         self.begin_fb = 0
         self.no_fb = 0
+        self.slot_index_fb = {"slot": 0, "index": 0, "number": 0}
         self.begin_lo = 0
         self.no_lo = 0
 
@@ -56,6 +59,14 @@ class Device:
         self.begin_pb = bitstring[8:24]
         self.no_pb = bitstring[24:40]
 
+        for i in range(0,bitstring_to_int(self.no_pb)):
+            self.slot_index_pb.append({"slot": 0, "index": 0, "number": 0})
+       
+            self.slot_index_pb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_pb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 24 + ((i)*32))])
+            self.slot_index_pb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 40 + ((i)*32)))])
+
+
         # Transducer Block
         self.begin_tb = bitstring[40:56]
         self.no_tb = bitstring[56:72]
@@ -80,7 +91,10 @@ class Device:
             if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
                 print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
                 print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
-
+        
+        if parse_y_n_input("Show start of Blocks? [y/n]: "):
+            for i in range(0,len(self.slot_index_pb)):
+                print(f"First PB:\n\tSlot:\t{hex(self.slot_index_pb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_pb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_pb[i]['number'])}")
 
 
 # ask user for input and try to parse to hex and than byte
