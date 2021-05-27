@@ -64,11 +64,11 @@ class Device:
 
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: "):
             print(f"Beging PB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
-            print(f"Number PB: {hex(bitstring_to_int(self.no_pb))}")
+            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
             print(f"Beging TB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_tb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_tb[8:16]))}")
-            print(f"Number PB: {hex(bitstring_to_int(self.no_tb))}")
+            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_tb))}")
             print(f"Beging FB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_fb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
-            print(f"Number PB: {hex(bitstring_to_int(self.no_fb))}")
+            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_fb))}")
 
 
 
