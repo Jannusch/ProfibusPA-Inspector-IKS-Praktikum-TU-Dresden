@@ -17,6 +17,23 @@ class Device:
         self.no_tb = 0
         self.begin_fb = 0
         self.no_fb = 0
+
+    def request_header(self):
+        framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
+        a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([0x01]) + bytes([0x00]))
+        answer = sr1(a)
+
+        raw_payload = bytes(answer[Raw])
+        bitstring = bytes_to_bitstring(raw_payload)
+        self.num_dir_obj = bitstring[40:56]
+        self.num_dir_entry = bitstring[56:72]
+        self.first_comp_list_dir_entry = bitstring[72:88]
+        self.num_comp_list_dir_entry = bitstring[88:104]
+        
+        if parse_y_n_input("Show header? [y/n]: "):
+            print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[8:24])}\nRev Number: {bitstring_to_int(bitstring[24:40])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
+            # print(f"""Header:\nDir ID: {bitstring[0:16]}\nRev Number: {bitstring_to_int(bitstring[16:32])}\nNum_Dir_Obj: {bitstring_to_int(device.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(device.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(device.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {device.num_comp_list_dir_entry}""")
+
         
 
 # ask user for input and try to parse to hex and than byte
@@ -151,4 +168,4 @@ if __name__ == "__main__":
 
     # make request
     # request(param_list)
-    request_header(device)
+    device.request_header()
