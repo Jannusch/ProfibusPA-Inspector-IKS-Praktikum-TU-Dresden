@@ -17,6 +17,8 @@ class Device:
         self.no_tb = 0
         self.begin_fb = 0
         self.no_fb = 0
+        self.begin_lo = 0
+        self.no_lo = 0
 
     def request_header(self):
         framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
@@ -53,7 +55,7 @@ class Device:
         # Physical Block
         self.begin_pb = bitstring[8:24]
         self.no_pb = bitstring[24:40]
-        
+
         # Transducer Block
         self.begin_tb = bitstring[40:56]
         self.no_tb = bitstring[56:72]
@@ -62,6 +64,11 @@ class Device:
         self.begin_fb = bitstring[72:88]
         self.no_fb = bitstring[88:104]
 
+        if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
+            # Link Object
+            self.begin_lo = bitstring[104:120]
+            self.no_lo = bitstring[120:136]
+
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: "):
             print(f"Beging PB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
             print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
@@ -69,6 +76,10 @@ class Device:
             print(f"\tNumber:\t{hex(bitstring_to_int(self.no_tb))}")
             print(f"Beging FB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_fb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
             print(f"\tNumber:\t{hex(bitstring_to_int(self.no_fb))}")
+
+            if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
+                print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
+                print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
 
 
 
