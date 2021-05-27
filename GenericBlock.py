@@ -18,15 +18,3 @@ class GenericBlock:
         self.block_object_byte = self.raw_bytes[1]
         self.parent_class_byte = self.raw_bytes[2]
         self.class_byte = self.raw_bytes[3]
-    
-    def get_reserved_byte(self):
-        return self.reserved_byte
-    
-    def get_block_object_byte(self):
-        return self.block_object_byte
-    
-    def get_parent_class_byte(self):
-        return self.parent_class_byte
-    
-    def get_class_byte(self):
-        return self.class_byte
