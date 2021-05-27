@@ -1,5 +1,5 @@
 from enum import IntEnum
-from GenericBlock import GenericBlock
+from Block import Block
 
 
 class TransducerBlockParentClass(IntEnum):
@@ -24,38 +24,6 @@ class TransducerBlockParentClass(IntEnum):
 
 class TransducerBlockClass(IntEnum):
     pass
-
-
-class TransducerBlock(GenericBlock):
-
-    def __init__(self, bytz):
-        super(bytz)
-
-        if self.block_object_byte != 1:
-            raise ValueError("Block Object must be 0x03 in Transducer Block! (got {})".format(self.block_object_byte))
-
-        self.use_class_definition = {
-            TransducerBlockParentClass.PRESSURE: TransducerBlockClassPressure,
-            TransducerBlockParentClass.TEMPERATURE: TransducerBlockClassTemperature,
-            TransducerBlockParentClass.FLOW: TransducerBlockClassFlow,
-            TransducerBlockParentClass.LEVEL: TransducerBlockClassLevel,
-            TransducerBlockParentClass.ACTUATOR: TransducerBlockClassActuator,
-            TransducerBlockParentClass.DISCRETE_IO: TransducerBlockClassDiscreteIO,
-            TransducerBlockParentClass.ANALYSER: TransducerBlockClassAnalyser,
-            TransducerBlockParentClass.AUXILIARY: TransducerBlockClassAuxiliary,
-            TransducerBlockParentClass.ALARM: TransducerBlockClassAlarm
-        }
-
-    def get_class(self) -> TransducerBlockClass:
-        enum = self.use_class_definition[TransducerBlockParentClass(
-            self.parent_class_byte)]
-        if enum != None:
-            return enum(self.class_byte)
-        else:
-            return None
-
-    def get_parent_class(self) -> TransducerBlockParentClass:
-        return TransducerBlockParentClass(self.parent_class_byte)
 
 
 class TransducerBlockClassPressure(TransducerBlockClass):
@@ -191,3 +159,16 @@ class TransducerBlockClassAlarm(TransducerBlockClass):
             return TransducerBlockClassAlarm.RESERVED
         else:
             raise ValueError()
+
+
+TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT = {
+    TransducerBlockParentClass.PRESSURE: TransducerBlockClassPressure,
+    TransducerBlockParentClass.TEMPERATURE: TransducerBlockClassTemperature,
+    TransducerBlockParentClass.FLOW: TransducerBlockClassFlow,
+    TransducerBlockParentClass.LEVEL: TransducerBlockClassLevel,
+    TransducerBlockParentClass.ACTUATOR: TransducerBlockClassActuator,
+    TransducerBlockParentClass.DISCRETE_IO: TransducerBlockClassDiscreteIO,
+    TransducerBlockParentClass.ANALYSER: TransducerBlockClassAnalyser,
+    TransducerBlockParentClass.AUXILIARY: TransducerBlockClassAuxiliary,
+    TransducerBlockParentClass.ALARM: TransducerBlockClassAlarm
+}

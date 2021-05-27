@@ -1,5 +1,6 @@
-from GenericBlock import GenericBlock
+from Block import Block
 from enum import IntEnum
+
 
 class FunctionBlockParentClass(IntEnum):
     INPUT = 1
@@ -21,36 +22,6 @@ class FunctionBlockParentClass(IntEnum):
 
 class FunctionBlockClass(IntEnum):
     pass
-
-
-class FunctionBlock(GenericBlock):
-
-    def __init__(self, bytz):
-        super(bytz)
-
-        if self.block_object_byte != 1:
-            raise ValueError("Block Object must be 0x02 in Function Block! (got {})".format(self.block_object_byte))
-    
-        self.use_class_definition = {
-            FunctionBlockParentClass.INPUT: FunctionBlockClassInput,
-            FunctionBlockParentClass.OUTPUT: FunctionBlockClassOutput,
-            FunctionBlockParentClass.CONTROL: FunctionBlockClassControl,
-            FunctionBlockParentClass.ADVANCED_CONTROL: FunctionBlockClassAdvancedControl,
-            FunctionBlockParentClass.CALCULATION: FunctionBlockClassCalculation,
-            FunctionBlockParentClass.AUXILIARY: FunctionBlockClassAuxiliary,
-            FunctionBlockParentClass.ALERT: FunctionBlockClassAlert
-        }
-
-    def get_class(self) -> FunctionBlockClass:
-        enum = self.use_class_definition[FunctionBlockParentClass(
-            self.parent_class_byte)]
-        if enum != None:
-            return enum(self.class_byte)
-        else:
-            return None
-
-    def get_parent_class(self) -> FunctionBlockParentClass:
-        return FunctionBlockParentClass(self.parent_class_byte)
 
 
 class FunctionBlockClassInput(FunctionBlockClass):
@@ -140,4 +111,14 @@ class FunctionBlockClassAlert(FunctionBlockClass):
             return FunctionBlockClassAlert.RESERVED
         else:
             raise ValueError()
-    
+
+
+FUNCTION_BLOCK_CLASSENUM_BY_PARENT = {
+    FunctionBlockParentClass.INPUT: FunctionBlockClassInput,
+    FunctionBlockParentClass.OUTPUT: FunctionBlockClassOutput,
+    FunctionBlockParentClass.CONTROL: FunctionBlockClassControl,
+    FunctionBlockParentClass.ADVANCED_CONTROL: FunctionBlockClassAdvancedControl,
+    FunctionBlockParentClass.CALCULATION: FunctionBlockClassCalculation,
+    FunctionBlockParentClass.AUXILIARY: FunctionBlockClassAuxiliary,
+    FunctionBlockParentClass.ALERT: FunctionBlockClassAlert
+}

@@ -1,4 +1,4 @@
-from GenericBlock import GenericBlock
+from Block import Block
 from enum import IntEnum
 
 
@@ -20,7 +20,7 @@ class PhysicalBlockParentClass(IntEnum):
             raise ValueError()
 
 
-class PhysicalBlock(GenericBlock):
+class PhysicalBlock(Block):
 
     def __init__(self, bytz):
         super(bytz)
