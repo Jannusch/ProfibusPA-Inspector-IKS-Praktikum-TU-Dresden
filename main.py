@@ -14,14 +14,18 @@ class Device:
         self.begin_pb = 0
         self.no_pb = 0
         self.slot_index_pb = []
+        
         self.begin_tb = 0
         self.no_tb = 0
         self.slot_index_tb = []
+
         self.begin_fb = 0
         self.no_fb = 0
         self.slot_index_fb = []
+
         self.begin_lo = 0
         self.no_lo = 0
+        self.slot_index_lo = []
 
     def request_header(self):
         framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
@@ -95,6 +99,14 @@ class Device:
             # Link Object
             self.begin_lo = bitstring[104:120]
             self.no_lo = bitstring[120:136]
+
+            for i in range(0,bitstring_to_int(self.no_pb)):
+                self.slot_index_lo.append({"slot": 0, "index": 0, "number": 0})
+        
+                self.slot_index_lo[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32))])
+                self.slot_index_lo[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 24 + ((i)*32))])
+                self.slot_index_lo[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 40 + ((i)*32)))])
+
 
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: "):
             print(f"Beging PB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
