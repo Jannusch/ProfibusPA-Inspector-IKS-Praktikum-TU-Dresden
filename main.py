@@ -16,10 +16,10 @@ class Device:
         self.slot_index_pb = []
         self.begin_tb = 0
         self.no_tb = 0
-        self.slot_index_tb = {"slot": 0, "index": 0, "number": 0}
+        self.slot_index_tb = []
         self.begin_fb = 0
         self.no_fb = 0
-        self.slot_index_fb = {"slot": 0, "index": 0, "number": 0}
+        self.slot_index_fb = []
         self.begin_lo = 0
         self.no_lo = 0
 
@@ -71,9 +71,25 @@ class Device:
         self.begin_tb = bitstring[40:56]
         self.no_tb = bitstring[56:72]
 
+        for i in range(0,bitstring_to_int(self.no_tb)):
+            self.slot_index_tb.append({"slot": 0, "index": 0, "number": 0})
+       
+            self.slot_index_tb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_tb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 24 + ((i)*32))])
+            self.slot_index_tb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 40 + ((i)*32)))])
+
+
         # Function Block
         self.begin_fb = bitstring[72:88]
         self.no_fb = bitstring[88:104]
+
+        for i in range(0,bitstring_to_int(self.no_pb)):
+            self.slot_index_fb.append({"slot": 0, "index": 0, "number": 0})
+       
+            self.slot_index_fb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_fb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 24 + ((i)*32))])
+            self.slot_index_fb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 40 + ((i)*32)))])
+
 
         if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
             # Link Object
@@ -95,6 +111,10 @@ class Device:
         if parse_y_n_input("Show start of Blocks? [y/n]: "):
             for i in range(0,len(self.slot_index_pb)):
                 print(f"First PB:\n\tSlot:\t{hex(self.slot_index_pb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_pb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_pb[i]['number'])}")
+            for i in range(0,len(self.slot_index_tb)):
+                print(f"First TB:\n\tSlot:\t{hex(self.slot_index_tb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_tb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_tb[i]['number'])}")
+            for i in range(0,len(self.slot_index_fb)):
+                print(f"First FB:\n\tSlot:\t{hex(self.slot_index_fb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_fb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_fb[i]['number'])}")
 
 
 # ask user for input and try to parse to hex and than byte
