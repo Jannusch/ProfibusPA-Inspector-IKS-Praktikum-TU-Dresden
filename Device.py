@@ -4,6 +4,8 @@ from scapy.all import *
 class Device:
     def __init__(self) -> None:
         self.address = 0
+        self.printLevel = PrintLevel.Ask
+
         # header
         self.num_dir_obj = 0
         self.num_dir_entry = 0
@@ -12,7 +14,7 @@ class Device:
         # composit list directory entrie
         self.begin_pb = 0
         self.no_pb = 0
-        self.slot_index_pb = []
+        self.slot_index_pb = [] # list of dicts : {"slot": 0, "index": 0, "number": 0}
         
         self.begin_tb = 0
         self.no_tb = 0
@@ -35,7 +37,7 @@ class Device:
         self.first_comp_list_dir_entry = bitstring[72:88]
         self.num_comp_list_dir_entry = bitstring[88:104]
         
-        if parse_y_n_input("Show header? [y/n]: "):
+        if parse_y_n_input("Show header? [y/n]: ", self.printLevel):
             print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[8:24])}\nRev Number: {bitstring_to_int(bitstring[24:40])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
 
     # make request to remote proxy via scapy stacking and show answer payload
@@ -91,7 +93,7 @@ class Device:
                 self.slot_index_lo[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 40 + ((i)*32)))])
 
 
-        if parse_y_n_input("Show Composite List Directory Entries? [y/n]: "):
+        if parse_y_n_input("Show Composite List Directory Entries? [y/n]: ", self.printLevel):
             print(f"Beging PB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
             print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
             print(f"Beging TB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_tb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_tb[8:16]))}")
@@ -103,7 +105,7 @@ class Device:
                 print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
                 print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
         
-        if parse_y_n_input("Show start of Blocks? [y/n]: "):
+        if parse_y_n_input("Show start of Blocks? [y/n]: ", self.printLevel):
             for i in range(0,len(self.slot_index_pb)):
                 print(f"{i + 1}. PB:\n\tSlot:\t{hex(self.slot_index_pb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_pb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_pb[i]['number'])}")
             for i in range(0,len(self.slot_index_tb)):
