@@ -27,12 +27,8 @@ class Device:
         self.slot_index_lo = []
 
     def request_header(self):
-        framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
-        a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([0x01]) + bytes([0x00]))
-        answer = sr1(a)
-
-        raw_payload = bytes(answer[Raw])
-        bitstring = bytes_to_bitstring(raw_payload)
+        # request header
+        bitstring = self.__request(0x01, 0x00)
 
         self.num_dir_obj = bitstring[40:56]
         self.num_dir_entry = bitstring[56:72]
@@ -44,19 +40,7 @@ class Device:
 
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
-        # build package with scapy stacking method -> IP()/UDP()/Raw()
-        framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
-        a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([0x01]) + bytes([int(self.num_dir_obj)]))
-
-        # send and wait for answer
-        answer = sr1(a)
-        # answer.show()
-
-        # convert "raw" answer to readble hex values
-        raw_payload = bytes(answer[Raw])
-        # print(raw_payload.hex())
-
-        bitstring = bytes_to_bitstring(raw_payload)
+        bitstring = self.__request(0x01, int(self.num_dir_obj))
 
         # Physical Block
         self.begin_pb = bitstring[8:24]
@@ -128,3 +112,18 @@ class Device:
                 print(f"{i + 1}. FB:\n\tSlot:\t{hex(self.slot_index_fb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_fb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_fb[i]['number'])}")
             for i in range(0,len(self.slot_index_lo)):
                 print(f"{i + 1}. LO:\n\tSlot:\t{hex(self.slot_index_lo[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_lo[i]['index'])}\n\tNumber:\t{hex(self.slot_index_lo[i]['number'])}")
+
+    # does the request over UDP and returns bitstring
+    def __request(self, slot:int, index:int):
+        framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
+        a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([slot]) + bytes([index]))
+
+        # send and wait for answer
+        answer = sr1(a)
+        # answer.show()
+
+        # convert "raw" answer to readble hex values
+        raw_payload = bytes(answer[Raw])
+        # print(raw_payload.hex())
+
+        return bytes_to_bitstring(raw_payload)
