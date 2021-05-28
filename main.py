@@ -1,6 +1,3 @@
-from scapy.all import *
-import sys
-import binascii
 from utils import *
 from Device import Device
 import argparse
