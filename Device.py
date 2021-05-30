@@ -1,5 +1,6 @@
 from utils import *
-from scapy.all import *
+from scapy.all import sr1, IP, UDP, Raw
+import random
 
 class Device:
     def __init__(self) -> None:
