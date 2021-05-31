@@ -10,8 +10,7 @@ if __name__ == "__main__":
     parser.add_argument('--print', '-p', choices=["all", "no"], dest="print", required=False, help="suppress questions for printing")
     args = parser.parse_args()
 
-    device = Device()
-    device.address = args.address 
+    device = Device(args.address)
     if args.print == "all":
         device.printLevel = PrintLevel.Full
     if args.print == "no":

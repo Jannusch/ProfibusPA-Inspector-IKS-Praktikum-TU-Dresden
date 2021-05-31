@@ -3,8 +3,8 @@ from scapy.all import sr1, IP, UDP, Raw
 import random
 
 class Device:
-    def __init__(self) -> None:
-        self.address = 0
+    def __init__(self, address = 0) -> None:
+        self.address = address
         self.printLevel = PrintLevel.Ask
 
         # header
