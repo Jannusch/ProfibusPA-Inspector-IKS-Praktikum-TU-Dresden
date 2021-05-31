@@ -13,7 +13,7 @@ class BlockType(IntEnum):
 
 class Block:
 
-    def __init__(self, bytz, type="bit"):
+    def __init__(self, bytz, type:str="bit") -> None:
         # got hex string
         if type == "hex" and isinstance(bytz, str) and len(bytz) == 20*2:
             self.raw_bytes_s = [char for char in bytz]
@@ -60,7 +60,7 @@ class Block:
         self.addr_of_view_1_slot = self.raw_bytes[17:18]
         self.no_of_views = self.raw_bytes[19] # byte 20
 
-    def __parse_block_head(self):
+    def __parse_block_head(self) -> None:
         self.block_type = BlockType(self.block_object_byte)
         if self.block_type == BlockType.PHYSICAL_BLOCK:
             self.__parse_physical_block_head()
@@ -69,16 +69,16 @@ class Block:
         elif self.block_type == BlockType.TRANSDUCER_BLOCK:
             self.__parse_transducer_block_head()
 
-    def __parse_physical_block_head(self):
+    def __parse_physical_block_head(self) -> None:
         self.parent_class = PhysicalBlockParentClass(self.parent_class_byte)
         self.block_class = None
 
-    def __parse_function_block_head(self):
+    def __parse_function_block_head(self) -> None:
         self.parent_class = FunctionBlockParentClass(self.parent_class_byte)
         self.block_class = FUNCTION_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](
             self.block_class_byte)
 
-    def __parse_transducer_block_head(self):
+    def __parse_transducer_block_head(self) -> None:
         self.parent_class = TransducerBlockParentClass(self.parent_class_byte)
         self.block_class = TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](
             self.block_class_byte)

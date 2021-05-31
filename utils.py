@@ -12,18 +12,19 @@ def bytes_to_bitstring(b) -> str:
 def bitstring_to_int(bs: str) -> int:
     return int(bs, 2)
 
-def parse_y_n_input(request, printLevel=PrintLevel.ASK) -> bool:
+def parse_y_n_input(request: str, printLevel: PrintLevel=PrintLevel.ASK) -> bool:
     if printLevel == PrintLevel.FULL:
         return True
     if printLevel == PrintLevel.NOTHING:
         return False
 
-    if printLevel == printLevel.Ask:
+    if printLevel == PrintLevel.ASK:
         answer = input(request)
         answer.lower()
         while(True):
             if answer == "y" or answer == "yes" or answer == "j":
                 return True
-            if answer == "n" or answer == "no":
+            elif answer == "n" or answer == "no":
                 return False
-            answer = input("Wrong input")
+            else:
+                answer = input("Wrong input")
