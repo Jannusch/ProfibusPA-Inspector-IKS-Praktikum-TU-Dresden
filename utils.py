@@ -1,9 +1,9 @@
 from enum import Enum
 
 class PrintLevel(Enum):
-    Full = 0
-    Ask = 1
-    Nothing = 2
+    FULL = 0
+    ASK = 1
+    NOTHING = 2
 
 def bytes_to_bitstring(b) -> str:
     bitstring = str(bin(int.from_bytes(b, byteorder='big')))[2:]
@@ -12,10 +12,10 @@ def bytes_to_bitstring(b) -> str:
 def bitstring_to_int(bs: str) -> int:
     return int(bs, 2)
 
-def parse_y_n_input(request, printLevel=PrintLevel.Ask) -> bool:
-    if printLevel == PrintLevel.Full:
+def parse_y_n_input(request, printLevel=PrintLevel.ASK) -> bool:
+    if printLevel == PrintLevel.FULL:
         return True
-    if printLevel == PrintLevel.Nothing:
+    if printLevel == PrintLevel.NOTHING:
         return False
 
     if printLevel == printLevel.Ask:

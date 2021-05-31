@@ -12,9 +12,9 @@ if __name__ == "__main__":
 
     device = Device(args.address)
     if args.print == "all":
-        device.printLevel = PrintLevel.Full
+        device.printLevel = PrintLevel.FULL
     if args.print == "no":
-        device.printLevel = PrintLevel.Nothing
+        device.printLevel = PrintLevel.NOTHING
 
     
     device.request_header()
