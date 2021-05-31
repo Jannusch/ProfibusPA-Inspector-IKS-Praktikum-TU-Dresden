@@ -3,9 +3,9 @@ from scapy.all import sr1, IP, UDP, Raw
 import random
 
 class Device:
-    def __init__(self, address = 0) -> None:
+    def __init__(self, address: int = 0, printLevel: PrintLevel = PrintLevel.ASK) -> None:
         self.address = address
-        self.printLevel = PrintLevel.ASK
+        self.printLevel = printLevel
 
         # header
         self.num_dir_obj = 0
