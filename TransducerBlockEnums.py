@@ -1,5 +1,4 @@
 from enum import IntEnum
-from Block import Block
 
 
 class TransducerBlockParentClass(IntEnum):
