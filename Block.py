@@ -30,10 +30,13 @@ class Block:
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
         else:
             raise ValueError()
-
+        
+        self.raw_bytes_s = ''.join(self.raw_bytes_s)
         self.raw_bytes = []
-        for i in range(len(self.raw_bytes_s) / 2):
-            self.raw_bytes[i] = int(self.raw_bytes_s[i:i + 1], 16)
+        for i in range(int(len(self.raw_bytes_s) / 2)):
+            self.raw_bytes.append(int(self.raw_bytes_s[2*i:2*i + 2], 16))
+        
+        print(self.raw_bytes)
 
         # Block should have 20 bytes
 
