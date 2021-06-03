@@ -44,6 +44,7 @@ class Device:
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
         bitstring = self.__request(0x01, int(self.num_dir_obj))
+        print(hex(bitstring_to_int(bitstring)))
 
         # Physical Block
         self.begin_pb = bitstring[0:16]
@@ -73,7 +74,7 @@ class Device:
         self.begin_fb = bitstring[64:80]
         self.no_fb = bitstring[80:96]
 
-        for i in range(0,bitstring_to_int(self.no_pb)):
+        for i in range(0,bitstring_to_int(self.no_fb)):
             self.slot_index_fb.append({"slot": 0, "index": 0, "number": 0})
        
             self.slot_index_fb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 8 + ((i)*32))])
