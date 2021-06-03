@@ -33,65 +33,65 @@ class Device:
         # request header
         bitstring = self.__request(0x01, 0x00)
 
-        self.num_dir_obj = bitstring[40:56]
-        self.num_dir_entry = bitstring[56:72]
-        self.first_comp_list_dir_entry = bitstring[72:88]
-        self.num_comp_list_dir_entry = bitstring[88:104]
+        self.num_dir_obj = bitstring[32:48]
+        self.num_dir_entry = bitstring[48:64]
+        self.first_comp_list_dir_entry = bitstring[64:80]
+        self.num_comp_list_dir_entry = bitstring[80:96]
         
         if parse_y_n_input("Show header? [y/n]: ", self.printLevel):
-            print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[8:24])}\nRev Number: {bitstring_to_int(bitstring[24:40])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
+            print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[0:16])}\nRev Number: {bitstring_to_int(bitstring[16:32])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
 
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
         bitstring = self.__request(0x01, int(self.num_dir_obj))
 
         # Physical Block
-        self.begin_pb = bitstring[8:24]
-        self.no_pb = bitstring[24:40]
+        self.begin_pb = bitstring[0:16]
+        self.no_pb = bitstring[16:32]
 
         for i in range(0,bitstring_to_int(self.no_pb)):
             self.slot_index_pb.append({"slot": 0, "index": 0, "number": 0})
        
-            self.slot_index_pb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32))])
-            self.slot_index_pb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 24 + ((i)*32))])
-            self.slot_index_pb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 40 + ((i)*32)))])
+            self.slot_index_pb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 8 + ((i)*32))])
+            self.slot_index_pb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_pb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_pb[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
         # Transducer Block
-        self.begin_tb = bitstring[40:56]
-        self.no_tb = bitstring[56:72]
+        self.begin_tb = bitstring[32:48]
+        self.no_tb = bitstring[48:64]
 
         for i in range(0,bitstring_to_int(self.no_tb)):
             self.slot_index_tb.append({"slot": 0, "index": 0, "number": 0})
        
-            self.slot_index_tb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32))])
-            self.slot_index_tb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 24 + ((i)*32))])
-            self.slot_index_tb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 40 + ((i)*32)))])
+            self.slot_index_tb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32  + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 8 + ((i)*32))])
+            self.slot_index_tb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_tb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_tb[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
         # Function Block
-        self.begin_fb = bitstring[72:88]
-        self.no_fb = bitstring[88:104]
+        self.begin_fb = bitstring[64:80]
+        self.no_fb = bitstring[80:96]
 
         for i in range(0,bitstring_to_int(self.no_pb)):
             self.slot_index_fb.append({"slot": 0, "index": 0, "number": 0})
        
-            self.slot_index_fb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32))])
-            self.slot_index_fb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 24 + ((i)*32))])
-            self.slot_index_fb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 40 + ((i)*32)))])
+            self.slot_index_fb[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 8 + ((i)*32))])
+            self.slot_index_fb[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32))])
+            self.slot_index_fb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
         if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
             # Link Object
-            self.begin_lo = bitstring[104:120]
-            self.no_lo = bitstring[120:136]
+            self.begin_lo = bitstring[96:112]
+            self.no_lo = bitstring[112:128]
 
             for i in range(0,bitstring_to_int(self.no_pb)):
                 self.slot_index_lo.append({"slot": 0, "index": 0, "number": 0})
         
-                self.slot_index_lo[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32))])
-                self.slot_index_lo[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 24 + ((i)*32))])
-                self.slot_index_lo[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 24 + ((i)*32)): (((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 40 + ((i)*32)))])
+                self.slot_index_lo[i]['slot'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 8 + ((i)*32))])
+                self.slot_index_lo[i]['index'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 8 + ((i)*32)): ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32))])
+                self.slot_index_lo[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_lo[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: ", self.printLevel):
@@ -127,6 +127,9 @@ class Device:
 
         # convert "raw" answer to readble hex values
         raw_payload = bytes(answer[Raw])
+        # print(framemarker)
+        # print(raw_payload.hex())
+        raw_payload = raw_payload[1:]
         # print(raw_payload.hex())
 
         return bytes_to_bitstring(raw_payload)
