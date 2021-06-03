@@ -1,6 +1,7 @@
 from utils import *
 from Device import Device
 import argparse
+from Block import Block
 
 
 if __name__ == "__main__":
@@ -21,3 +22,6 @@ if __name__ == "__main__":
     
     device.request_header()
     device.request_composit_list_directory()
+    block = device.request_block(5, 16)
+    Block(block, "bit")
+    pass

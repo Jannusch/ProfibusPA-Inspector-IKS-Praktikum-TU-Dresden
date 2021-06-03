@@ -134,3 +134,8 @@ class Device:
         # print(raw_payload.hex())
 
         return bytes_to_bitstring(raw_payload)
+
+    def request_block(self, slot:int, index:int):
+        payload = self.__request(slot, index)
+        print(hex(bitstring_to_int(payload)))
+        return(payload)
