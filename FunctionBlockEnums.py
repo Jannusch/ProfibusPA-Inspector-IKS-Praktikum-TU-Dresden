@@ -12,40 +12,41 @@ class FunctionBlockParentClass(IntEnum):
 
 
 class FunctionBlockClass(IntEnum):
-    pass
+    RESERVED = 127
+    MANUFACTURER_SPECIFIC = 128
 
 
-class FunctionBlockClassInput(FunctionBlockClass):
+class FunctionBlockClassInput(IntEnum):
     ANALOG_INPUT = 1
     DISCRETE_INPUT = 2
 
 
-class FunctionBlockClassOutput(FunctionBlockClass):
+class FunctionBlockClassOutput(IntEnum):
     ANALOG_OUTPUT = 1
     DISCRETE_OUTPUT = 2
 
 
-class FunctionBlockClassControl(FunctionBlockClass):
+class FunctionBlockClassControl(IntEnum):
     PID = 1
     SAMPLE_SELECTOR = 2
     LAB_DEVICE_CONTROL = 3
 
 
-class FunctionBlockClassAdvancedControl(FunctionBlockClass):
+class FunctionBlockClassAdvancedControl(IntEnum):
     LAB_INSTRUMENTS = 1
 
 
-class FunctionBlockClassCalculation(FunctionBlockClass):
+class FunctionBlockClassCalculation(IntEnum):
     TOTALISER = 8
 
 
-class FunctionBlockClassAuxiliary(FunctionBlockClass):
+class FunctionBlockClassAuxiliary(IntEnum):
     RAMP = 1
     BM_LOGBOOK = 2
     SAMPLE = 3
 
 
-class FunctionBlockClassAlert(FunctionBlockClass):
+class FunctionBlockClassAlert(IntEnum):
     pass
 
 
