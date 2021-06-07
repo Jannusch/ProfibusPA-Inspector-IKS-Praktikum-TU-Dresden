@@ -14,10 +14,11 @@ class TransducerBlockParentClass(IntEnum):
 
 
 class TransducerBlockClass(IntEnum):
-    pass
+    RESERVED = 127
+    MANUFACTURER_SPECIFIC = 128
 
 
-class TransducerBlockClassPressure(TransducerBlockClass):
+class TransducerBlockClassPressure(IntEnum):
     DIFFERENTIAL = 1
     ABSOLUTE = 2
     GAGE = 3
@@ -27,7 +28,7 @@ class TransducerBlockClassPressure(TransducerBlockClass):
     MIXED_PRESSURE = 7
 
 
-class TransducerBlockClassTemperature(TransducerBlockClass):
+class TransducerBlockClassTemperature(IntEnum):
     THERMOCOUPLE = 1
     TC = 1
     RESISTANCE_THERMOMETER = 2
@@ -38,7 +39,7 @@ class TransducerBlockClassTemperature(TransducerBlockClass):
     TC_RTD_R_DC = 18
 
 
-class TransducerBlockClassFlow(TransducerBlockClass):
+class TransducerBlockClassFlow(IntEnum):
     ELECTROMAGNETIC = 1
     VORTEX = 2
     CORIOLIS = 3
@@ -48,35 +49,35 @@ class TransducerBlockClassFlow(TransducerBlockClass):
     DIFFERENTIAL_PRESSURE = 7
 
 
-class TransducerBlockClassLevel(TransducerBlockClass):
+class TransducerBlockClassLevel(IntEnum):
     HYDROSTATIC = 1
     ECHO_LEVEL = 2
     RADIOMETRIC = 3
     CAPACITY = 4
 
 
-class TransducerBlockClassActuator(TransducerBlockClass):
+class TransducerBlockClassActuator(IntEnum):
     ELECTRIC = 1
     ELECTRO_PNEUMATIC = 2
     ELECTRO_HYDRAULIC = 3
 
 
-class TransducerBlockClassDiscreteIO(TransducerBlockClass):
+class TransducerBlockClassDiscreteIO(IntEnum):
     SENSOR_INPUT = 1
     ACTUATOR = 2
 
 
-class TransducerBlockClassAnalyser(TransducerBlockClass):
+class TransducerBlockClassAnalyser(IntEnum):
     STANDARD = 1
 
 
-class TransducerBlockClassAuxiliary(TransducerBlockClass):
+class TransducerBlockClassAuxiliary(IntEnum):
     TRANSFER = 1
     CONTROL = 2
     LIMIT = 3
 
 
-class TransducerBlockClassAlarm(TransducerBlockClass):
+class TransducerBlockClassAlarm(IntEnum):
     BINARY_MESSAGE = 1
 
 

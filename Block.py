@@ -1,5 +1,5 @@
-from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockParentClass
-from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockParentClass
+from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockClass, TransducerBlockParentClass
+from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockClass, FunctionBlockParentClass
 from PhysicalBlockEnums import PhysicalBlockParentClass
 from utils import bitstring_to_int
 from enum import IntEnum
@@ -13,30 +13,32 @@ class BlockType(IntEnum):
 
 class Block:
 
-    def __init__(self, bytz, type:str="bit") -> None:
+    def __init__(self, bytz, type: str = "bit") -> None:
         # got hex string
-        if type == "hex" and isinstance(bytz, str) and len(bytz) == 20*2:
+        if type == "hex" and isinstance(bytz, str) and len(bytz) == 20 * 2:
             self.raw_bytes_s = [char for char in bytz]
         # got bitstring
-        elif type == "bit" and isinstance(bytz, str) and len(bytz) == 20*8:
+        elif type == "bit" and isinstance(bytz, str) and len(bytz) == 20 * 8:
             bytz = bitstring_to_int(bytz)
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
         # got list
         elif type == "list" and isinstance(bytz, list) and len(bytz) == 20:
             self.raw_bytes_s = ""
-            for i in range(20): self.raw_bytes_s = self.raw_bytes_s + hex(bytz[i])[2:].rjust(2, "0")
+            for i in range(20):
+                self.raw_bytes_s = self.raw_bytes_s + \
+                    hex(bytz[i])[2:].rjust(2, "0")
         # got integer
         elif isinstance(bytz, int):
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
         else:
             raise ValueError()
-        
+
         self.raw_bytes_s = ''.join(self.raw_bytes_s)
         self.raw_bytes = []
         for i in range(int(len(self.raw_bytes_s) / 2)):
-            self.raw_bytes.append(int(self.raw_bytes_s[2*i:2*i + 2], 16))
+            self.raw_bytes.append(int(self.raw_bytes_s[2 * i:2 * i + 2], 16))
         
-        print(self.raw_bytes)
+        print(self.raw_bytes_s)
 
         # Block should have 20 bytes
 
@@ -78,10 +80,20 @@ class Block:
 
     def __parse_function_block_head(self) -> None:
         self.parent_class = FunctionBlockParentClass(self.parent_class_byte)
-        self.block_class = FUNCTION_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](
-            self.block_class_byte)
+        if self.block_class_byte > 128:
+            self.block_class = FunctionBlockClass.MANUFACTURER_SPECIFIC
+        else:
+            try:
+                self.block_class = FUNCTION_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](self.block_class_byte)
+            except ValueError:
+                self.block_class = FunctionBlockClass.RESERVED
 
     def __parse_transducer_block_head(self) -> None:
         self.parent_class = TransducerBlockParentClass(self.parent_class_byte)
-        self.block_class = TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](
-            self.block_class_byte)
+        if self.block_class_byte > 128:
+            self.block_class = TransducerBlockClass.MANUFACTURER_SPECIFIC
+        else:
+            try:
+                self.block_class = TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](self.block_class_byte)
+            except ValueError:
+                self.block_class = TransducerBlockClass.RESERVED
