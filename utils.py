@@ -9,25 +9,26 @@ class DataType(IntEnum):
     FLOAT = 0
     VALUESTATUS101 = 1
     VALUESTATUS102 = 2
-    DS36 = 3
-    DS37 = 4
-    DS42 = 5
-    DS49 = 6
-    DS50 = 7
-    DS51 = 8
-    DS60 = 9
-    DS61 = 10
-    DS62 = 11
-    DS63 = 12
-    DS64 = 13
-    DS65 = 14
-    DS66 = 15
-    DS67 = 16
-    DS68 = 17
-    OCTETSTRING = 18
-    UNSIGNED8 = 19
-    UNSIGNED16 = 20
-    FLOATFLOAT = 21
+    DS32 = 3
+    DS36 = 4
+    DS37 = 5
+    DS42 = 6
+    DS49 = 7
+    DS50 = 8
+    DS51 = 9
+    DS60 = 10
+    DS61 = 11
+    DS62 = 12
+    DS63 = 13
+    DS64 = 14
+    DS65 = 15
+    DS66 = 16
+    DS67 = 17
+    DS68 = 18
+    OCTETSTRING = 19
+    UNSIGNED8 = 20
+    UNSIGNED16 = 21
+    FLOATFLOAT = 22
 
 
 def bytes_to_bitstring(b) -> str:

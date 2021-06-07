@@ -1,8 +1,8 @@
 from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockClass, TransducerBlockParentClass
-from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockClass, FunctionBlockParentClass
+from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockClass, FunctionBlockClassInput, FunctionBlockParentClass
 from PhysicalBlockEnums import PhysicalBlockParentClass
-from utils import bitstring_to_int
-from enum import IntEnum
+from utils import DataType, DataTypes, bitstring_to_int
+from enum import Enum, IntEnum
 
 
 class BlockType(IntEnum):
@@ -97,3 +97,14 @@ class Block:
                 self.block_class = TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT[self.parent_class](self.block_class_byte)
             except ValueError:
                 self.block_class = TransducerBlockClass.RESERVED
+
+
+class BlockViewStandardParams(Enum):
+    BLOCK_OBJECT = {"type": DataType.DS32, "offset": 0}
+    ST_REV = {"type": DataType.UNSIGNED16, "offset": 1}
+    TAG_DESC = {"type": DataType.OCTETSTRING, "offset": 2}
+    STRATEGY = {"type": DataType.UNSIGNED16, "offset": 3}
+    ALERT_KEY = {"type": DataType.UNSIGNED8, "offset": 4}
+    TARGET_MODE = {"type": DataType.UNSIGNED8, "offset": 5}
+    MODE_BLK = {"type": DataType.DS37, "offset": 6}
+    ALARM_SUM = {"type": DataType.DS42, "offset": 7}
