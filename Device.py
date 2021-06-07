@@ -96,12 +96,12 @@ class Device:
 
 
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: ", self.printLevel):
-            print(f"Beging PB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
-            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
-            print(f"Beging TB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_tb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_tb[8:16]))}")
-            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_tb))}")
-            print(f"Beging FB:\n\tIndex:\t{hex(bitstring_to_int(self.begin_fb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
-            print(f"\tNumber:\t{hex(bitstring_to_int(self.no_fb))}")
+            print(f"Beging PB:\n\tIndex:\t{bitstring_to_int(self.begin_pb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
+            print(f"\tNumber:\t{bitstring_to_int(self.no_pb)}")
+            print(f"Beging TB:\n\tIndex:\t{bitstring_to_int(self.begin_tb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_tb[8:16]))}")
+            print(f"\tNumber:\t{bitstring_to_int(self.no_tb)}")
+            print(f"Beging FB:\n\tIndex:\t{bitstring_to_int(self.begin_fb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
+            print(f"\tNumber:\t{bitstring_to_int(self.no_fb)}")
 
             if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
                 print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
@@ -109,13 +109,13 @@ class Device:
         
         if parse_y_n_input("Show start of Blocks? [y/n]: ", self.printLevel):
             for i in range(0,len(self.slot_index_pb)):
-                print(f"{i + 1}. PB:\n\tSlot:\t{hex(self.slot_index_pb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_pb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_pb[i]['number'])}")
+                print(f"{i + 1}. PB:\n\tSlot:\t{self.slot_index_pb[i]['slot']}\n\tIndex:\t{self.slot_index_pb[i]['index']}\n\tNumber:\t{self.slot_index_pb[i]['number']}")
             for i in range(0,len(self.slot_index_tb)):
-                print(f"{i + 1}. TB:\n\tSlot:\t{hex(self.slot_index_tb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_tb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_tb[i]['number'])}")
+                print(f"{i + 1}. TB:\n\tSlot:\t{self.slot_index_tb[i]['slot']}\n\tIndex:\t{self.slot_index_tb[i]['index']}\n\tNumber:\t{self.slot_index_tb[i]['number']}")
             for i in range(0,len(self.slot_index_fb)):
-                print(f"{i + 1}. FB:\n\tSlot:\t{hex(self.slot_index_fb[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_fb[i]['index'])}\n\tNumber:\t{hex(self.slot_index_fb[i]['number'])}")
+                print(f"{i + 1}. FB:\n\tSlot:\t{self.slot_index_fb[i]['slot']}\n\tIndex:\t{self.slot_index_fb[i]['index']}\n\tNumber:\t{self.slot_index_fb[i]['number']}")
             for i in range(0,len(self.slot_index_lo)):
-                print(f"{i + 1}. LO:\n\tSlot:\t{hex(self.slot_index_lo[i]['slot'])}\n\tIndex:\t{hex(self.slot_index_lo[i]['index'])}\n\tNumber:\t{hex(self.slot_index_lo[i]['number'])}")
+                print(f"{i + 1}. LO:\n\tSlot:\t{self.slot_index_lo[i]['slot']}\n\tIndex:\t{self.slot_index_lo[i]['index']}\n\tNumber:\t{self.slot_index_lo[i]['number']}")
 
     # does the request over UDP and returns bitstring
     def __request(self, slot:int, index:int):
