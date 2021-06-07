@@ -29,6 +29,14 @@ class Device:
         self.no_lo = 0
         self.slot_index_lo = []
 
+    def __str__(self) -> str:
+        return(f"""Device at address {self.address}:
+        \tNumber PB: {len(self.slot_index_pb)}
+        \tNumber TB: {len(self.slot_index_tb)}
+        \tNumber FB: {len(self.slot_index_fb)}
+        \tNumber LO: {len(self.slot_index_lo)} """)
+
+
     def request_header(self):
         # request header
         bitstring = self.__request(0x01, 0x00)
