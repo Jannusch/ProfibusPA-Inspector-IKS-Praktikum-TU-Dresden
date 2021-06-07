@@ -5,7 +5,7 @@ class PrintLevel(Enum):
     ASK = 1
     NOTHING = 2
 
-class DataTypes(IntEnum):
+class DataType(IntEnum):
     FLOAT = 0
     VALUESTATUS101 = 1
     VALUESTATUS102 = 2
@@ -28,7 +28,6 @@ class DataTypes(IntEnum):
     UNSIGNED8 = 19
     UNSIGNED16 = 20
     FLOATFLOAT = 21
-
 
 
 def bytes_to_bitstring(b) -> str:
