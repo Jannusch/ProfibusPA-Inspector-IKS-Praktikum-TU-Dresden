@@ -1,6 +1,7 @@
 from utils import *
 from scapy.all import sr1, IP, UDP, Raw
 import random
+from Block import Block
 
 class Device:
     def __init__(self, address: int = 0, printLevel: PrintLevel = PrintLevel.ASK) -> None:
@@ -52,7 +53,7 @@ class Device:
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
         bitstring = self.__request(0x01, int(self.num_dir_obj))
-        print(hex(bitstring_to_int(bitstring)))
+        # print(hex(bitstring_to_int(bitstring)))
 
         # Physical Block
         self.begin_pb = bitstring[0:16]
@@ -145,5 +146,21 @@ class Device:
 
     def request_block(self, slot:int, index:int):
         payload = self.__request(slot, index)
-        print(hex(bitstring_to_int(payload)))
+        # print(hex(bitstring_to_int(payload)))
         return payload
+    
+    def inspect_block(self, number: int):
+        print(f"Inspecting the Block at position {number}")
+        block = {"slot": 0, "index": 0}
+        if number-1 < bitstring_to_int(self.no_pb):
+            block = self.slot_index_pb[number-1]
+        elif number-1 < bitstring_to_int(self.no_pb) + bitstring_to_int(self.no_tb):
+            block = self.slot_index_tb[number-1 - bitstring_to_int(self.no_pb)]
+        elif number-1 < bitstring_to_int(self.no_pb) + bitstring_to_int(self.no_fb) + bitstring_to_int(self.no_tb):
+            block = self.slot_index_fb[number-1 - bitstring_to_int(self.no_pb) - bitstring_to_int(self.no_tb)]
+        elif number-1 < bitstring_to_int(self.no_pb) + bitstring_to_int(self.no_fb) + bitstring_to_int(self.no_tb) + bitstring_to_int(self.no_lo):
+            block = self.slot_index_lo[number-1 - bitstring_to_int(self.no_pb) - bitstring_to_int(self.no_tb) - bitstring_to_int(self.no_fb)]
+        
+        block_bit_string = self.request_block(block["slot"], block["index"])
+        block = Block(block_bit_string, "bit")
+        print(block)

@@ -22,6 +22,11 @@ if __name__ == "__main__":
     
     device.request_header()
     device.request_composit_list_directory()
-    block = device.request_block(5, 16)
+    
+    number = input("Pleas enter Block Number:")
+    device.inspect_block(int(number))
+
+    """block = device.request_block(1, 110)
+    print(hex(bitstring_to_int(block)))
     Block(block, "bit")
-    pass
+    """
