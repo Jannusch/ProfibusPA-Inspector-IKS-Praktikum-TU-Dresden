@@ -1,8 +1,8 @@
-from enum import IntEnum
+from enum import Enum
 from utils import DataType
 
 
-class PhysicalBlockParentClass(IntEnum):
+class PhysicalBlockParentClass(Enum):
     TRANSMITTER = 1
     ACTUATOR = 2
     DISCRETE_IO = 3
