@@ -1,7 +1,7 @@
 from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockClass, TransducerBlockParentClass
 from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockClass, FunctionBlockClassInput, FunctionBlockParentClass
 from PhysicalBlockEnums import PhysicalBlockParentClass
-from utils import DataType, DataTypes, bitstring_to_int
+from utils import DataType, DataType, bitstring_to_int
 from enum import Enum, IntEnum
 
 

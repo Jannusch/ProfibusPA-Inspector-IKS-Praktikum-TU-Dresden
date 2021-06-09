@@ -29,7 +29,7 @@ class DataType(IntEnum):
     UNSIGNED8 = 20
     UNSIGNED16 = 21
     FLOATFLOAT = 22
-    VisibleString = 23
+    VISIBLESTRING = 23
 
 
 def bytes_to_bitstring(b) -> str:
