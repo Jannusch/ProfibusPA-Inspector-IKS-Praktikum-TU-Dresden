@@ -65,6 +65,9 @@ class Block:
         self.addr_of_view_1_slot = self.raw_bytes[17:18]
         self.no_of_views = self.raw_bytes[19] # byte 20
 
+    def __str__(self) -> str:
+        return(f"""Blocktype: \t\t{self.block_type.name}\nNumber of params: \t{self.no_of_parameters}""")
+
     def __parse_block_head(self) -> None:
         self.block_type = BlockType(self.block_object_byte)
         if self.block_type == BlockType.PHYSICAL_BLOCK:
