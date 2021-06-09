@@ -1,7 +1,7 @@
-from enum import IntEnum
+from enum import IntEnum, Enum
 
 
-class TransducerBlockParentClass(IntEnum):
+class TransducerBlockParentClass(Enum):
     PRESSURE = 1
     TEMPERATURE = 2
     FLOW = 3
@@ -11,6 +11,9 @@ class TransducerBlockParentClass(IntEnum):
     ANALYSER = 7
     AUXILIARY = 8
     ALARM = 9
+    PARAMS = {
+        
+    }
 
 
 class TransducerBlockClass(IntEnum):

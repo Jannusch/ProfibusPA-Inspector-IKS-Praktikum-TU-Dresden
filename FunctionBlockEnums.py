@@ -1,7 +1,7 @@
-from enum import IntEnum
+from enum import IntEnum, Enum
 
 
-class FunctionBlockParentClass(IntEnum):
+class FunctionBlockParentClass(Enum):
     INPUT = 1
     OUTPUT = 2
     CONTROL = 3
@@ -9,6 +9,9 @@ class FunctionBlockParentClass(IntEnum):
     CALCULATION = 5
     AUXILIARY = 6
     ALERT = 7
+    PARAMS = {
+        
+    }
 
 
 class FunctionBlockClass(IntEnum):
