@@ -3,16 +3,26 @@ from scapy.all import sr1, IP, UDP, Raw
 import random
 from Block import Block
 
+class Device_Header:
+    def __init__(self, bitstring: str):
+        self.dir_id = bitstring_to_int(bitstring[0:16])
+        self.rev_number = bitstring_to_int(bitstring[16:32])
+        self.num_dir_obj = bitstring[32:48]
+        self.num_dir_entry = bitstring[48:64]
+        self.first_comp_list_dir_entry = bitstring[64:80]
+        self.num_comp_list_dir_entry = bitstring[80:96]
+
+    def __str__(self) -> str:
+        return(f"""Header:\nDir ID: {self.dir_id}\nRev Number: {self.rev_number}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
+        
+
 class Device:
     def __init__(self, address: int = 0, printLevel: PrintLevel = PrintLevel.ASK) -> None:
         self.address = address
         self.printLevel = printLevel
 
         # header
-        self.num_dir_obj = 0
-        self.num_dir_entry = 0
-        self.first_comp_list_dir_entry = 0
-        self.num_comp_list_dir_entry = 0
+        self.header = Device_Header("".zfill(96))
         # composit list directory entrie
         self.begin_pb = 0
         self.no_pb = 0
@@ -41,18 +51,15 @@ class Device:
     def request_header(self):
         # request header
         bitstring = self.__request(0x01, 0x00)
+        self.header = Device_Header(bitstring)
 
-        self.num_dir_obj = bitstring[32:48]
-        self.num_dir_entry = bitstring[48:64]
-        self.first_comp_list_dir_entry = bitstring[64:80]
-        self.num_comp_list_dir_entry = bitstring[80:96]
-        
         if parse_y_n_input("Show header? [y/n]: ", self.printLevel):
-            print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[0:16])}\nRev Number: {bitstring_to_int(bitstring[16:32])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
+            print(self.header)
+            # print(f"""Header:\nDir ID: {bitstring_to_int(bitstring[0:16])}\nRev Number: {bitstring_to_int(bitstring[16:32])}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
 
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
-        bitstring = self.__request(0x01, int(self.num_dir_obj))
+        bitstring = self.__request(0x01, int(self.header.num_dir_obj))
         # print(hex(bitstring_to_int(bitstring)))
 
         # Physical Block
@@ -91,7 +98,7 @@ class Device:
             self.slot_index_fb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
-        if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
+        if bitstring_to_int(self.header.num_comp_list_dir_entry) >= 4:
             # Link Object
             self.begin_lo = bitstring[96:112]
             self.no_lo = bitstring[112:128]
@@ -112,7 +119,7 @@ class Device:
             print(f"Beging FB:\n\tIndex:\t{bitstring_to_int(self.begin_fb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
             print(f"\tNumber:\t{bitstring_to_int(self.no_fb)}")
 
-            if bitstring_to_int(self.num_comp_list_dir_entry) >= 4:
+            if bitstring_to_int(self.header.num_comp_list_dir_entry) >= 4:
                 print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
                 print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
         
