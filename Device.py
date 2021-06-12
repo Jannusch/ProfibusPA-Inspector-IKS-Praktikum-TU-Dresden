@@ -132,11 +132,7 @@ class Device:
             print(f"\tNumber:\t{bitstring_to_int(self.no_fb)}")
 
             if self.header.num_comp_list_dir_entry >= 4:
-<<<<<<< HEAD
                 print(f"Begin LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{bitstring_to_int(self.begin_pb[8:16])}")
-=======
-                print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
->>>>>>> 10d6f1c2ebf3894eca538bc9e4f0faa455e3d856
                 print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
         
         if parse_y_n_input("Show start of Blocks? [y/n]: ", self.printLevel):
