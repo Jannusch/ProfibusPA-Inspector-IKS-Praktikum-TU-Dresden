@@ -111,6 +111,13 @@ class Device:
             self.begin_lo = bitstring[96:112]
             self.no_lo = bitstring[112:128]
 
+        if bitstring_to_int(self.begin_lo[0:8]) == 1:
+            self.__evaluate_composit_list_directory_entrys(bitstring[(bitstring_to_int(self.begin_lo[8:16]) - 1 )*32:], self.no_lo, self.slot_index_lo)
+        else:
+            new_bitsting = self.__request(0x01, bitstring_to_int(self.begin_lo[0:8]))
+            self.__evaluate_composit_list_directory_entrys(new_bitsting[(bitstring_to_int(self.begin_lo[8:16]) -(1 + self.header.num_comp_list_dir_entry) )*32:], self.no_lo, self.slot_index_lo)
+
+
             for i in range(0,bitstring_to_int(self.no_pb)):
                 self.slot_index_lo.append({"slot": 0, "index": 0, "number": 0})
         
