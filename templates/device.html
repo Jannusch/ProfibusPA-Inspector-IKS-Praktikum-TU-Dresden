@@ -30,5 +30,77 @@
             <li class="list-group-item">Number Comp List Dir Entrys: {{device.header.num_comp_list_dir_entry}}</li>
           </ul>
         </div>
+
+        <!-- Physical Blocks-->
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Physical Blocks</b>
+            Index: {{bitstring_to_int(device.begin_pb[0:8])}} Offset: {{bitstring_to_int(device.begin_pb[8:16])}} Number: {{bitstring_to_int(device.no_pb)}}
+          </div>
+        </div>
+
+        <div class="row">
+        {% for block in range(len(device.slot_index_pb)): %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            <b>{{block + 1}}. PB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_pb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_pb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_pb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+
+        <!-- Function Blocks-->
+
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Function Blocks</b>
+            Index: {{bitstring_to_int(device.begin_fb[0:8])}} Offset: {{bitstring_to_int(device.begin_fb[8:16])}} Number: {{bitstring_to_int(device.no_fb)}}
+          </div>
+        </div>
+        
+        <div class="row">
+        {% for block in range(len(device.slot_index_fb)): %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            <b>{{block + 1}}. PB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_fb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_fb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_fb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+        <!-- Trancducer Blocks-->
+
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Physical Blocks</b>
+            Index: {{bitstring_to_int(device.begin_tb[0:8])}} Offset: {{bitstring_to_int(device.begin_tb[8:16])}} Number: {{bitstring_to_int(device.no_tb)}}
+          </div>
+        </div>
+        <div class="row">
+        {% for block in range(len(device.slot_index_tb)): %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            <b>{{block + 1}}. PB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_tb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_tb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_tb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
     </body>
 </html>

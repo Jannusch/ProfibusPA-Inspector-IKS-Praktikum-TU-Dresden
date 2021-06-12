@@ -8,6 +8,11 @@ import sys
 # Webserver
 from flask import Flask, render_template, request
 app = Flask(__name__)
+app.add_template_global(bitstring_to_int, name='bitstring_to_int')
+app.add_template_global(len, name='len')
+app.add_template_global(range, name='range')
+
+
 
 @app.route("/")
 def hello():
@@ -19,7 +24,7 @@ def data():
         form_data = request.form
         print(form_data["Field_Address"])
 
-        device = Device(int(form_data["Field_Address"]), PrintLevel.NOTHING)
+        device = Device(int(form_data["Field_Address"]), PrintLevel.FULL)
     
         device.request_header()
         device.request_composit_list_directory()

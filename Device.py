@@ -112,15 +112,15 @@ class Device:
 
 
         if parse_y_n_input("Show Composite List Directory Entries? [y/n]: ", self.printLevel):
-            print(f"Beging PB:\n\tIndex:\t{bitstring_to_int(self.begin_pb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
+            print(f"Begin PB:\n\tIndex:\t{bitstring_to_int(self.begin_pb[0:8])}\n\tOffset:\t{bitstring_to_int(self.begin_pb[8:16])}")
             print(f"\tNumber:\t{bitstring_to_int(self.no_pb)}")
-            print(f"Beging TB:\n\tIndex:\t{bitstring_to_int(self.begin_tb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_tb[8:16]))}")
+            print(f"Begin TB:\n\tIndex:\t{bitstring_to_int(self.begin_tb[0:8])}\n\tOffset:\t{bitstring_to_int(self.begin_tb[8:16])}")
             print(f"\tNumber:\t{bitstring_to_int(self.no_tb)}")
-            print(f"Beging FB:\n\tIndex:\t{bitstring_to_int(self.begin_fb[0:8])}\n\tOffset:\t{hex(bitstring_to_int(self.begin_fb[8:16]))}")
+            print(f"Begin FB:\n\tIndex:\t{bitstring_to_int(self.begin_fb[0:8])}\n\tOffset:\t{bitstring_to_int(self.begin_fb[8:16])}")
             print(f"\tNumber:\t{bitstring_to_int(self.no_fb)}")
 
-            if bitstring_to_int(self.header.num_comp_list_dir_entry) >= 4:
-                print(f"Beging LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{hex(bitstring_to_int(self.begin_pb[8:16]))}")
+            if self.header.num_comp_list_dir_entry >= 4:
+                print(f"Begin LO:\n\tIndex:\t{hex(bitstring_to_int(self.begin_pb[0:8]))}\n\tOffset:\t{bitstring_to_int(self.begin_pb[8:16])}")
                 print(f"\tNumber:\t{hex(bitstring_to_int(self.no_pb))}")
         
         if parse_y_n_input("Show start of Blocks? [y/n]: ", self.printLevel):
@@ -149,7 +149,7 @@ class Device:
             # print(framemarker)
             # print(raw_payload.hex())
             raw_payload = raw_payload[1:]
-            print(raw_payload)
+            # print(raw_payload)
             if raw_payload != b'':
                 return bytes_to_bitstring(raw_payload)
         # TODO Error Handling if three attamps not successful
