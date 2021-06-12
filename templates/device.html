@@ -10,8 +10,8 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand">Profibus PA device at addresss {{device.address}}</a>
-              <form class="d-flex">
-                <input class="form-control me-2" type="number" placeholder="Address" aria-label="Search">
+              <form class="d-flex" action="/init_with_address" method="POST">
+                <input class="form-control me-2" name="Field_Address" type="number" placeholder="Address" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Inspect</button>
               </form>
             </div>
