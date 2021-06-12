@@ -61,7 +61,6 @@ class Device:
         for i in range(0,bitstring_to_int(number)):
             name.append({"slot": 0, "index": 0, "number": 0})
        
-            print(hex(bitstring_to_int(bitstring)))
             name[i]['slot'] = bitstring_to_int( bitstring[(i *32) : 8 + ((i *32))])
             name[i]['index'] = bitstring_to_int( bitstring[ (8 + ((i)*32)): (16 + ((i)*32))])
             name[i]['number'] = bitstring_to_int( bitstring[ (16 + ((i)*32)): ((32 + ((i)*32)))])
@@ -75,14 +74,13 @@ class Device:
         self.begin_pb = bitstring[0:16]
         self.no_pb = bitstring[16:32]
         
-        print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[8:16]))
+        # print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[8:16]))
 
 
         if bitstring_to_int(self.begin_pb[0:8]) == 1:
             self.__evaluate_composit_list_directory_entrys(bitstring[(bitstring_to_int(self.begin_pb[8:16]) - 1 )*32:], self.no_pb, self.slot_index_pb)
         else:
             new_bitsting = self.__request(0x01, bitstring_to_int(self.begin_pb[0:8]))
-            print(hex(bitstring_to_int(new_bitsting)), bitstring_to_int(self.begin_pb[8:16]))
             self.__evaluate_composit_list_directory_entrys(new_bitsting[(bitstring_to_int(self.begin_pb[8:16]) -(1 + self.header.num_comp_list_dir_entry) )*32:], self.no_pb, self.slot_index_pb)
 
 
@@ -94,7 +92,6 @@ class Device:
             self.__evaluate_composit_list_directory_entrys(bitstring[(bitstring_to_int(self.begin_tb[8:16]) - 1 )*32:], self.no_tb, self.slot_index_tb)
         else:
             new_bitsting = self.__request(0x01, bitstring_to_int(self.begin_tb[0:8]))
-            print(hex(bitstring_to_int(new_bitsting)), bitstring_to_int(self.begin_tb[8:16]))
             self.__evaluate_composit_list_directory_entrys(new_bitsting[(bitstring_to_int(self.begin_tb[8:16]) - (1 + self.header.num_comp_list_dir_entry))*32:], self.no_tb, self.slot_index_tb)
 
         # Function Block
@@ -105,7 +102,6 @@ class Device:
             self.__evaluate_composit_list_directory_entrys(bitstring[(bitstring_to_int(self.begin_fb[8:16]) - 1 )*32:], self.no_fb, self.slot_index_fb)
         else:
             new_bitsting = self.__request(0x01, bitstring_to_int(self.begin_fb[0:8]))
-            print(hex(bitstring_to_int(new_bitsting)), bitstring_to_int(self.begin_fb[8:16]))
             self.__evaluate_composit_list_directory_entrys(new_bitsting[(bitstring_to_int(self.begin_fb[8:16]) -(1 + self.header.num_comp_list_dir_entry) )*32:], self.no_fb, self.slot_index_fb)
 
 
@@ -186,3 +182,18 @@ class Device:
         block_bit_string = self.request_block(block["slot"], block["index"])
         block = Block(block_bit_string, "bit")
         print(block)
+
+    def inspect_block(self, number: int, type: str) -> Block:
+        block = {"slot": 0, "index": 0}
+        if type == "pb":
+            block = self.slot_index_pb[number]
+        elif type == "tb":
+            block = self.slot_index_tb[number]
+        elif type == "fb":
+            block = self.slot_index_fb[number]
+
+        block_bit_string = self.request_block(block["slot"], block["index"])
+        block = Block(block_bit_string, "bit")
+        return block
+
+

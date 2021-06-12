@@ -32,8 +32,7 @@ def inspect_block():
     device = session.get('device')
 
     block = device.inspect_block(int(block_number), block_type)
-    print(block)
-    return("Hello Block")
+    return render_template("block.html", block=block, device=device)
 
 @app.route("/init_with_address/", methods = ['POST'])
 def data():
@@ -41,7 +40,7 @@ def data():
         form_data = request.form
         print(form_data["Field_Address"])
 
-        device = Device(int(form_data["Field_Address"]), PrintLevel.FULL)
+        device = Device(int(form_data["Field_Address"]), PrintLevel.NOTHING)
     
         device.request_header()
         device.request_composit_list_directory()
