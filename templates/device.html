@@ -42,7 +42,8 @@
 
         <div class="row">
         {% for block in range(len(device.slot_index_pb)): %}
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 18rem;" >
+          <a href="/inspect_block/?number={{block}}&type=pb" class="stretched-link"></a>
           <div class="card-header">
             <b>{{block + 1}}. PB</b>
           </div>
@@ -68,6 +69,7 @@
         <div class="row">
         {% for block in range(len(device.slot_index_fb)): %}
         <div class="card" style="width: 18rem;">
+          <a href="/inspect_block/?number={{block}}&type=fb" class="stretched-link"></a>
           <div class="card-header">
             <b>{{block + 1}}. FB</b>
           </div>
@@ -91,6 +93,7 @@
         <div class="row">
         {% for block in range(len(device.slot_index_tb)): %}
         <div class="card" style="width: 18rem;">
+          <a href="/inspect_block/?number={{block}}&type=tb" class="stretched-link"></a>
           <div class="card-header">
             <b>{{block + 1}}. TB</b>
           </div>

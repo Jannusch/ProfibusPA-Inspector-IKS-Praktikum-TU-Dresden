@@ -1,4 +1,6 @@
 import re
+
+from scapy import sessions
 from utils import *
 from Device import Device
 import argparse
@@ -6,8 +8,13 @@ from Block import Block
 import sys
 
 # Webserver
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
+from flask_session import Session
+
 app = Flask(__name__)
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
 app.add_template_global(bitstring_to_int, name='bitstring_to_int')
 app.add_template_global(len, name='len')
 app.add_template_global(range, name='range')
@@ -17,6 +24,16 @@ app.add_template_global(range, name='range')
 @app.route("/")
 def hello():
     return render_template('index.html')
+
+@app.route("/inspect_block/")
+def inspect_block():
+    block_number = request.values.get('number')
+    block_type = request.values.get('type')
+    device = session.get('device')
+
+    block = device.inspect_block(int(block_number), block_type)
+    print(block)
+    return("Hello Block")
 
 @app.route("/init_with_address/", methods = ['POST'])
 def data():
@@ -28,6 +45,7 @@ def data():
     
         device.request_header()
         device.request_composit_list_directory()
+        session['device'] = device
 
         return render_template("device.html", device=device)
 
