@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+        <title>Profibus PA Inspector</title>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand">Profibus PA device at addresss {{device.address}}</a>
+              <form class="d-flex" action="/init_with_address" method="POST">
+                <input class="form-control me-2" name="Field_Address" type="number" placeholder="Address" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Inspect</button>
+              </form>
+            </div>
+          </nav>
+
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            Device Header
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Dir ID: {{device.header.dir_id}}</li>
+            <li class="list-group-item">Rev Number: {{device.header.rev_number}}</li>
+            <li class="list-group-item">Number Dir Obj: {{device.header.num_dir_obj}}</li>
+            <li class="list-group-item">Number Dir Entry: {{device.header.num_dir_entry}}</li>
+            <li class="list-group-item">First Comp List Dir Entry: {{device.header.first_comp_list_dir_entry}}</li>
+            <li class="list-group-item">Number Comp List Dir Entrys: {{device.header.num_comp_list_dir_entry}}</li>
+          </ul>
+        </div>
+
+        <!-- Physical Blocks-->
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Physical Blocks</b>
+            Index: {{bitstring_to_int(device.begin_pb[0:8])}} Offset: {{bitstring_to_int(device.begin_pb[8:16])}} Number: {{bitstring_to_int(device.no_pb)}}
+          </div>
+        </div>
+
+        <div class="row">
+        {% for block in range(len(device.slot_index_pb)): %}
+        <div class="card" style="width: 18rem;" >
+          <a href="/inspect_block/?number={{block}}&type=pb" class="stretched-link"></a>
+          <div class="card-header">
+            <b>{{block + 1}}. PB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_pb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_pb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_pb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+
+        <!-- Function Blocks-->
+
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Function Blocks</b>
+            Index: {{bitstring_to_int(device.begin_fb[0:8])}} Offset: {{bitstring_to_int(device.begin_fb[8:16])}} Number: {{bitstring_to_int(device.no_fb)}}
+          </div>
+        </div>
+        
+        <div class="row">
+        {% for block in range(len(device.slot_index_fb)): %}
+        <div class="card" style="width: 18rem;">
+          <a href="/inspect_block/?number={{block}}&type=fb" class="stretched-link"></a>
+          <div class="card-header">
+            <b>{{block + 1}}. FB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_fb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_fb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_fb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+        <!-- Trancducer Blocks-->
+
+        <br>
+        <div class="card">
+          <div class="card-header">
+            <b>Trancducer Blocks</b>
+            Index: {{bitstring_to_int(device.begin_tb[0:8])}} Offset: {{bitstring_to_int(device.begin_tb[8:16])}} Number: {{bitstring_to_int(device.no_tb)}}
+          </div>
+        </div>
+        <div class="row">
+        {% for block in range(len(device.slot_index_tb)): %}
+        <div class="card" style="width: 18rem;">
+          <a href="/inspect_block/?number={{block}}&type=tb" class="stretched-link"></a>
+          <div class="card-header">
+            <b>{{block + 1}}. TB</b>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item">Slot: {{device.slot_index_tb[block]['slot']}}</li>
+            <li class="list-group-item">Index: {{device.slot_index_tb[block]['index']}}</li>
+            <li class="list-group-item">Number: {{device.slot_index_tb[block]['number']}}</li>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+    </body>
+</html>
