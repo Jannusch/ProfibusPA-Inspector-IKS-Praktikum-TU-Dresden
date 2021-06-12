@@ -69,7 +69,7 @@
         {% for block in range(len(device.slot_index_fb)): %}
         <div class="card" style="width: 18rem;">
           <div class="card-header">
-            <b>{{block + 1}}. PB</b>
+            <b>{{block + 1}}. FB</b>
           </div>
           <div class="list-group list-group-flush">
             <li class="list-group-item">Slot: {{device.slot_index_fb[block]['slot']}}</li>
@@ -84,7 +84,7 @@
         <br>
         <div class="card">
           <div class="card-header">
-            <b>Physical Blocks</b>
+            <b>Trancducer Blocks</b>
             Index: {{bitstring_to_int(device.begin_tb[0:8])}} Offset: {{bitstring_to_int(device.begin_tb[8:16])}} Number: {{bitstring_to_int(device.no_tb)}}
           </div>
         </div>
@@ -92,7 +92,7 @@
         {% for block in range(len(device.slot_index_tb)): %}
         <div class="card" style="width: 18rem;">
           <div class="card-header">
-            <b>{{block + 1}}. PB</b>
+            <b>{{block + 1}}. TB</b>
           </div>
           <div class="list-group list-group-flush">
             <li class="list-group-item">Slot: {{device.slot_index_tb[block]['slot']}}</li>
