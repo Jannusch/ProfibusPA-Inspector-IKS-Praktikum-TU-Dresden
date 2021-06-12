@@ -135,21 +135,24 @@ class Device:
 
     # does the request over UDP and returns bitstring
     def __request(self, slot:int, index:int):
-        framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
-        a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([slot]) + bytes([index]))
+        for x in range(3):
+            print(f'Try {x}')
+            framemarker = bytes([(0xff & random.randint(0x00, 0xff))])
+            a = IP(dst="141.76.82.170")/UDP(sport=33333, dport=12345)/Raw(load=framemarker + bytes([self.address]) + bytes([slot]) + bytes([index]))
 
-        # send and wait for answer
-        answer = sr1(a)
-        # answer.show()
+            # send and wait for answer
+            answer = sr1(a)
+            # answer.show()
 
-        # convert "raw" answer to readble hex values
-        raw_payload = bytes(answer[Raw])
-        # print(framemarker)
-        # print(raw_payload.hex())
-        raw_payload = raw_payload[1:]
-        # print(raw_payload.hex())
-
-        return bytes_to_bitstring(raw_payload)
+            # convert "raw" answer to readble hex values
+            raw_payload = bytes(answer[Raw])
+            # print(framemarker)
+            # print(raw_payload.hex())
+            raw_payload = raw_payload[1:]
+            print(raw_payload)
+            if raw_payload != b'':
+                return bytes_to_bitstring(raw_payload)
+        # TODO Error Handling if three attamps not successful
 
     def request_block(self, slot:int, index:int):
         payload = self.__request(slot, index)
