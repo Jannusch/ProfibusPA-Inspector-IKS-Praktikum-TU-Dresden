@@ -7,13 +7,13 @@ class Device_Header:
     def __init__(self, bitstring: str):
         self.dir_id = bitstring_to_int(bitstring[0:16])
         self.rev_number = bitstring_to_int(bitstring[16:32])
-        self.num_dir_obj = bitstring[32:48]
-        self.num_dir_entry = bitstring[48:64]
-        self.first_comp_list_dir_entry = bitstring[64:80]
-        self.num_comp_list_dir_entry = bitstring[80:96]
+        self.num_dir_obj = bitstring_to_int(bitstring[32:48])
+        self.num_dir_entry = bitstring_to_int(bitstring[48:64])
+        self.first_comp_list_dir_entry = bitstring_to_int(bitstring[64:80])
+        self.num_comp_list_dir_entry = bitstring_to_int(bitstring[80:96])
 
     def __str__(self) -> str:
-        return(f"""Header:\nDir ID: {self.dir_id}\nRev Number: {self.rev_number}\nNum_Dir_Obj: {bitstring_to_int(self.num_dir_obj)}\nNum_Dir_Entry: {bitstring_to_int(self.num_dir_entry)}\nFirst_Comp_List_Dir_Entry: {bitstring_to_int(self.first_comp_list_dir_entry)}\nNum_Comp_List_Dir_Entry: {bitstring_to_int(self.num_comp_list_dir_entry)}""")
+        return(f"""Header:\nDir ID: {self.dir_id}\nRev Number: {self.rev_number}\nNum_Dir_Obj: {self.num_dir_obj}\nNum_Dir_Entry: {self.num_dir_entry}\nFirst_Comp_List_Dir_Entry: {self.first_comp_list_dir_entry}\nNum_Comp_List_Dir_Entry: {self.num_comp_list_dir_entry}""")
         
 
 class Device:
@@ -98,7 +98,7 @@ class Device:
             self.slot_index_fb[i]['number'] = bitstring_to_int( bitstring[ ((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 16 + ((i)*32)): (((bitstring_to_int(self.begin_fb[8:16])-1) * 32 + 32 + ((i)*32)))])
 
 
-        if bitstring_to_int(self.header.num_comp_list_dir_entry) >= 4:
+        if self.header.num_comp_list_dir_entry >= 4:
             # Link Object
             self.begin_lo = bitstring[96:112]
             self.no_lo = bitstring[112:128]
