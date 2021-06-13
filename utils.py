@@ -12,24 +12,26 @@ class DataType(IntEnum):
     DS32 = 3
     DS36 = 4
     DS37 = 5
-    DS42 = 6
-    DS49 = 7
-    DS50 = 8
-    DS51 = 9
-    DS60 = 10
-    DS61 = 11
-    DS62 = 12
-    DS63 = 13
-    DS64 = 14
-    DS65 = 15
-    DS66 = 16
-    DS67 = 17
-    DS68 = 18
-    OCTETSTRING = 19
-    UNSIGNED8 = 20
-    UNSIGNED16 = 21
-    FLOATFLOAT = 22
-    VISIBLESTRING = 23
+    DS39 = 6
+    DS42 = 7
+    DS49 = 8
+    DS50 = 9
+    DS51 = 10
+    DS60 = 11
+    DS61 = 12
+    DS62 = 13
+    DS63 = 14
+    DS64 = 15
+    DS65 = 16
+    DS66 = 17
+    DS67 = 18
+    DS68 = 19
+    OCTETSTRING = 20
+    UNSIGNED8 = 21
+    UNSIGNED16 = 22
+    UNSIGNED32 = 23
+    FLOATFLOAT = 24
+    VISIBLESTRING = 25
 
 
 def bytes_to_bitstring(b) -> str:
