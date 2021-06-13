@@ -38,8 +38,7 @@ def inspect_block():
 def data():
     if request.method == 'POST':
         form_data = request.form
-        print(form_data["Field_Address"])
-
+        
         device = Device(int(form_data["Field_Address"]), PrintLevel.NOTHING)
     
         device.request_header()
