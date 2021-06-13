@@ -7,12 +7,24 @@
     </head>
     <body>
 
+      <script>
+        var loadingBtn = '<button style="width: 8rem;" class="btn btn-primary" type="button" disabled><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Loading...</button>'
+        function loadingBtnFunction()
+        {
+          var elmnt = document.getElementById("btn_container");
+          console.log(elmnt);
+          elmnt.innerHTML = loadingBtn;
+        }
+      </script>
+
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand">Profibus PA device at addresss {{device.address}}</a>
-              <form class="d-flex" action="/init_with_address" method="POST">
+              <form class="d-flex" action="/init_with_address" method="POST" onsubmit="loadingBtnFunction()">
                 <input class="form-control me-2" name="Field_Address" type="number" placeholder="Address" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Inspect</button>
+                <div id="btn_container">
+                  <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
+                </div>
               </form>
             </div>
           </nav>
