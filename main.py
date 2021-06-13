@@ -48,6 +48,11 @@ def data():
 
         return render_template("device.html", device=device)
 
+@app.route("/request_optional/", methods = ['POST'])
+def request_optional():
+    form_data = request.form
+    print(form_data)
+    return "hI"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool for Profibus PA device inspection")
