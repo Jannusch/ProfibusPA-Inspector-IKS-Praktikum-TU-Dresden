@@ -1,5 +1,5 @@
-from TransducerBlockEnums import TRANSDUCER_BLOCK_CLASSENUM_BY_PARENT, TransducerBlockClass, TransducerBlockParentClass
-from FunctionBlockEnums import FUNCTION_BLOCK_CLASSENUM_BY_PARENT, FunctionBlockClass, FunctionBlockClassInput, FunctionBlockParentClass
+from TransducerBlockEnums import *
+from FunctionBlockEnums import *
 from PhysicalBlockEnums import PhysicalBlockParentClass
 from utils import DataType, DataType, bitstring_to_int
 from enum import Enum, IntEnum
@@ -31,7 +31,7 @@ class Block:
         elif isinstance(bytz, int):
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
         else:
-            raise ValueError()
+            raise AttributeError()
 
         self.raw_bytes_s = ''.join(self.raw_bytes_s)
         self.raw_bytes = []
@@ -160,7 +160,7 @@ class BlockViewTotalizerParams(Enum):
     LO_LO_ALM = {"type": DataType.DS39, "offset": 25}
 
 
-class BlockViewTemperatureThermocoupleParams(Enum):
+class BlockViewTemperatureTCParams(Enum):
     PRIMARY_VALUE = {"type": DataType.VALUESTATUS101, "offset": 8}
     PRIMARY_VALUE_UNIT = {"type": DataType.UNSIGNED16, "offset": 9}
     SECONDARY_VALUE_1 = {"type": DataType.VALUESTATUS101, "offset": 10}
@@ -193,7 +193,7 @@ class BlockViewTemperatureThermocoupleParams(Enum):
     TAB_ACTUAL_NUMBER = {"type": DataType.UNSIGNED8, "offset": 51}
 
 
-class BlockViewTemperatureThermoresistanceParams(Enum):
+class BlockViewTemperatureTRParams(Enum):
     PRIMARY_VALUE = {"type": DataType.VALUESTATUS101, "offset": 8}
     PRIMARY_VALUE_UNIT = {"type": DataType.UNSIGNED16, "offset": 9}
     SECONDARY_VALUE_1 = {"type": DataType.VALUESTATUS101, "offset": 10}
@@ -226,7 +226,7 @@ class BlockViewTemperatureThermoresistanceParams(Enum):
     TAB_ACTUAL_NUMBER = {"type": DataType.UNSIGNED8, "offset": 51}
 
 
-class BlockViewTemperaturePyrometerParams(Enum):
+class BlockViewTemperaturePyroParams(Enum):
     PRIMARY_VALUE = {"type": DataType.VALUESTATUS101, "offset": 8}
     PRIMARY_VALUE_UNIT = {"type": DataType.UNSIGNED16, "offset": 9}
     SECONDARY_VALUE_1 = {"type": DataType.VALUESTATUS101, "offset": 10}
@@ -253,6 +253,41 @@ class BlockViewTemperaturePyrometerParams(Enum):
     PEAK_TIME = {"type": DataType.FLOAT, "offset": 42}
     TRACK_HOLD = {"type": DataType.UNSIGNED8, "offset": 43}
     SPECT_FILT_SET = {"type": DataType.UNSIGNED8, "offset": 44}
+    TAB_ENTRY = {"type": DataType.UNSIGNED8, "offset": 45}
+    TAB_X_Y_VALUE = {"type": DataType.FLOATFLOAT, "offset": 46}
+    TAB_MIN_NUMBER = {"type": DataType.UNSIGNED8, "offset": 47}
+    TAB_MAX_NUMBER = {"type": DataType.UNSIGNED8, "offset": 48}
+    TAB_OP_CODE = {"type": DataType.UNSIGNED8, "offset": 49}
+    TAB_STATUS = {"type": DataType.UNSIGNED8, "offset": 50}
+    TAB_ACTUAL_NUMBER = {"type": DataType.UNSIGNED8, "offset": 51}
+
+class BlockViewTemperatureTC_RParams(Enum):
+    PRIMARY_VALUE = {"type": DataType.VALUESTATUS101, "offset": 8}
+    PRIMARY_VALUE_UNIT = {"type": DataType.UNSIGNED16, "offset": 9}
+    SECONDARY_VALUE_1 = {"type": DataType.VALUESTATUS101, "offset": 10}
+    SECONDARY_VALUE_2 = {"type": DataType.VALUESTATUS101, "offset": 11}
+    SENSOR_MEAS_TYPE = {"type": DataType.UNSIGNED8, "offset": 12}
+    INPUT_RANGE = {"type": DataType.UNSIGNED8, "offset": 13}
+    LIN_TYPE = {"type": DataType.UNSIGNED8, "offset": 14}
+    BIAS_1 = {"type": DataType.FLOAT, "offset": 19}
+    BIAS_2 = {"type": DataType.FLOAT, "offset": 20}
+    UPPER_SENSOR_LIMIT = {"type": DataType.FLOAT, "offset": 21}
+    LOWER_SENSOR_LIMIT = {"type": DataType.FLOAT, "offset": 22}
+    INPUT_FAULT_GEN = {"type": DataType.UNSIGNED8, "offset": 24}
+    INPUT_FAULT_1 = {"type": DataType.UNSIGNED8, "offset": 25}
+    INPUT_FAULT_2 = {"type": DataType.UNSIGNED8, "offset": 26}
+    SENSOR_WIRE_CHECK_1 = {"type": DataType.UNSIGNED8, "offset": 27}
+    SENSOR_WIRE_CHECK_2 = {"type": DataType.UNSIGNED8, "offset": 28}
+    MAX_SENSOR_VALUE_1 = {"type": DataType.FLOAT, "offset": 29}
+    MIN_SENSOR_VALUE_1 = {"type": DataType.FLOAT, "offset": 30}
+    MAX_SENSOR_VALUE_2 = {"type": DataType.FLOAT, "offset": 31}
+    MIN_SENSOR_VALUE_2 = {"type": DataType.FLOAT, "offset": 32}
+    RJ_TEMP = {"type": DataType.FLOAT, "offset": 33}
+    RJ_TYPE = {"type": DataType.UNSIGNED8, "offset": 34}
+    EXTERNAL_RJ_VALUE = {"type": DataType.FLOAT, "offset": 35}
+    SENSOR_CONNECTION = {"type": DataType.UNSIGNED8, "offset": 36}
+    COMP_WIRE1 = {"type": DataType.FLOAT, "offset": 37}
+    COMP_WIRE2 = {"type": DataType.FLOAT, "offset": 38}
     TAB_ENTRY = {"type": DataType.UNSIGNED8, "offset": 45}
     TAB_X_Y_VALUE = {"type": DataType.FLOATFLOAT, "offset": 46}
     TAB_MIN_NUMBER = {"type": DataType.UNSIGNED8, "offset": 47}
@@ -380,3 +415,40 @@ class BlockViewFlowParams(Enum):
     SOUND_VELOCITY_HI_LIMIT = {"type": DataType.FLOAT, "offset": 40}
     SAMPLING_FREQ = {"type": DataType.VALUESTATUS101, "offset": 41}
     SAMPLING_FREQ_UNITS = {"type": DataType.UNSIGNED16, "offset": 42}
+
+
+BlockViewAdapter = {
+    FunctionBlockClassInput.ANALOG_INPUT: BlockViewAnalogInputParams,
+
+    FunctionBlockClassCalculation.TOTALISER: BlockViewTotalizerParams,
+
+    TransducerBlockClassFlow.ELECTROMAGNETIC: BlockViewFlowParams,
+    TransducerBlockClassFlow.VORTEX: BlockViewFlowParams,
+    TransducerBlockClassFlow.CORIOLIS: BlockViewFlowParams,
+    TransducerBlockClassFlow.THERMAL_MASS: BlockViewFlowParams,
+    TransducerBlockClassFlow.ULTRASONIC: BlockViewFlowParams,
+    TransducerBlockClassFlow.VARIABLE_AREA: BlockViewFlowParams,
+    TransducerBlockClassFlow.DIFFERENTIAL_PRESSURE: BlockViewFlowParams,
+
+    TransducerBlockClassPressure.DIFFERENTIAL: BlockViewPressureParams,
+    TransducerBlockClassPressure.ABSOLUTE: BlockViewPressureParams,
+    TransducerBlockClassPressure.GAGE: BlockViewPressureParams,
+    TransducerBlockClassPressure.PRESSURE_LEVEL_FLOW: BlockViewPressureParams,
+    TransducerBlockClassPressure.PRESSURE_LEVEL: BlockViewPressureParams,
+    TransducerBlockClassPressure.PRESSURE_FLOW: BlockViewPressureParams,
+    TransducerBlockClassPressure.MIXED_PRESSURE: BlockViewPressureParams,
+
+    TransducerBlockClassLevel.HYDROSTATIC: BlockViewLevelParams,
+    TransducerBlockClassLevel.ECHO_LEVEL: BlockViewLevelParams,
+    TransducerBlockClassLevel.RADIOMETRIC: BlockViewLevelParams,
+    TransducerBlockClassLevel.CAPACITY: BlockViewLevelParams,
+
+    TransducerBlockClassTemperature.THERMOCOUPLE: BlockViewTemperatureTCParams,
+    TransducerBlockClassTemperature.TC: BlockViewTemperatureTCParams,
+    TransducerBlockClassTemperature.RESISTANCE_THERMOMETER: BlockViewTemperatureTRParams,
+    TransducerBlockClassTemperature.RTD: BlockViewTemperatureTRParams,
+    TransducerBlockClassTemperature.PYROMETER: BlockViewTemperaturePyroParams,
+    TransducerBlockClassTemperature.TC_DC: BlockViewTemperatureTCParams,
+    TransducerBlockClassTemperature.RTD_R: BlockViewTemperatureTRParams,
+    TransducerBlockClassTemperature.TC_RTD_R_DC: BlockViewTemperatureTC_RParams,
+}
