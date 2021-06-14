@@ -34,6 +34,9 @@ class DataType(IntEnum):
     VISIBLESTRING = 25
 
 
+def parse_response(value: str, type: DataType) -> str:
+    pass
+
 def bytes_to_bitstring(b) -> str:
     bitstring = str(bin(int.from_bytes(b, byteorder='big')))[2:]
     return bitstring.rjust(len(b)*8, "0")
