@@ -1,9 +1,13 @@
+from codecs import decode
+import struct
 from enum import Enum, IntEnum
+
 
 class PrintLevel(Enum):
     FULL = 0
     ASK = 1
     NOTHING = 2
+
 
 class DataType(IntEnum):
     FLOAT = 0
@@ -34,14 +38,38 @@ class DataType(IntEnum):
     VISIBLESTRING = 25
 
 
+# https://stackoverflow.com/a/8762541
+# https://creativecommons.org/licenses/by-sa/4.0/
+
+
+def bin_to_float(b):
+    """ Convert binary string to a float. """
+    bf = int_to_bytes(int(b, 2), 8)  # 8 bytes needed for IEEE 754 binary64.
+    return struct.unpack('>d', bf)[0]
+
+# https://stackoverflow.com/a/8762541
+# https://creativecommons.org/licenses/by-sa/4.0/
+
+
+def int_to_bytes(n, length):  # Helper function
+    """ Int/long to byte string.
+
+        Python 3.2+ has a built-in int.to_bytes() method that could be used
+        instead, but the following works in earlier versions including 2.x.
+    """
+    return decode('%%0%dx' % (length << 1) % n, 'hex')[-length:]
+
+
 def bytes_to_bitstring(b) -> str:
     bitstring = str(bin(int.from_bytes(b, byteorder='big')))[2:]
-    return bitstring.rjust(len(b)*8, "0")
+    return bitstring.rjust(len(b) * 8, "0")
+
 
 def bitstring_to_int(bs: str) -> int:
     return int(bs, 2)
 
-def parse_y_n_input(request: str, printLevel: PrintLevel=PrintLevel.ASK) -> bool:
+
+def parse_y_n_input(request: str, printLevel: PrintLevel = PrintLevel.ASK) -> bool:
     if printLevel == PrintLevel.FULL:
         return True
     if printLevel == PrintLevel.NOTHING:
