@@ -1,10 +1,11 @@
+from PhysicalBlockEnums import PhysicalBlockParentClass
 import re
 
 from scapy import sessions
 from utils import *
 from Device import Device
 import argparse
-from Block import Block
+from Block import Block, BlockViewAdapter
 import sys
 
 # Webserver
@@ -32,7 +33,12 @@ def inspect_block():
     device = session.get('device')
 
     block = device.inspect_block(int(block_number), block_type)
-    return render_template("block.html", block=block, device=device)
+    print(block)
+    if block.block_class in BlockViewAdapter:
+        params = BlockViewAdapter[block.block_class]
+    else:
+        params = BlockViewAdapter[PhysicalBlockParentClass]
+    return render_template("block.html", block=block, device=device, params=params)
 
 @app.route("/init_with_address/", methods = ['POST'])
 def data():
@@ -48,10 +54,16 @@ def data():
 
         return render_template("device.html", device=device)
 
-@app.route("/request_optional/", methods = ['POST'])
+@app.route("/request_optional_pb/", methods = ['POST'])
 def request_optional():
     form_data = request.form
-    print(form_data)
+    requested_params = {}
+    for key  in form_data.keys():
+        enum = BlockViewAdapter[PhysicalBlockParentClass]
+        requested_params[key] = enum.key.value
+    
+    device = session.get('device')
+    device.request_additional_information('pb', requested_params)
     return "hI"
 
 if __name__ == "__main__":

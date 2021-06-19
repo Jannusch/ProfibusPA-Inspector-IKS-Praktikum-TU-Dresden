@@ -45,15 +45,14 @@
             </div>
             <div class="col">
 
-              <form action="/request_optional" method="POST" onsubmit="loadingBtnFunction()">
-     
+              <form action="/request_optional_pb" method="POST" onsubmit="loadingBtnFunction()">
                 <label>Optional Params:</label>
-                {% for param in block.parent_class.PARAMS.value:%}     
+                {% for param in params:%}     
               
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox"  name="{{param}}" id="{{param}}">
                   <label class="form-check-label" for="{{param}}">
-                    {{param.replace('_', ' ')}}
+                    {{param.name.replace('_', ' ')}}
                   </label>
                 </div> 
                 {% endfor %}

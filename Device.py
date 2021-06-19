@@ -2,6 +2,7 @@ from utils import *
 from scapy.all import sr1, IP, UDP, Raw
 import random
 from Block import Block
+from decoding import parse_response
 
 class Device_Header:
     def __init__(self, bitstring: str):
@@ -69,12 +70,13 @@ class Device:
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
         bitstring = self.__request(0x01, 0x01)
+        # print(hex(bitstring_to_int(bitstring)))
 
         # Physical Block
         self.begin_pb = bitstring[0:16]
         self.no_pb = bitstring[16:32]
         
-        # print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[8:16]))
+        # print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[0:8]))
 
 
         if bitstring_to_int(self.begin_pb[0:8]) == 1:
@@ -164,6 +166,15 @@ class Device:
         payload = self.__request(slot, index)
         # print(hex(bitstring_to_int(payload)))
         return payload
+    
+    def request_additional_information(self, block:str, params:dict):
+        for param in params:
+            offset = params[param]['offset']
+            slot = self.slot_index_pb[0]['slot']
+            index = self.slot_index_pb[0]['index']
+            answer = self.__request(slot, int(index)+int(offset))
+            answer = parse_response(answer, params[param]['type'])
+            print(answer)
     
     def inspect_block(self, number: int):
         print(f"Inspecting the Block at position {number}")
