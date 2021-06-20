@@ -5,15 +5,15 @@ from Status import Status
 
 def parse_response(value: str, type: DataType) -> str:
     if type == DataType.VALUESTATUS101:
-        return "Value: " + bin_to_float(value[:32]) + " | Status: " + Status(value[32:]).quality.name
+        return f"Value: {bin_to_float(value[:32])} | Status:  {Status(value[32:]).quality.name}"
     elif type == DataType.VALUESTATUS102:
-        return "Value: " + bitstring_to_int(value[:32]) + " | Status: " + Status(value[32:]).quality.name
+        return f"Value: {bitstring_to_int(value[:32])}| Status: {Status(value[32:]).quality.name}"
     elif type == DataType.FLOAT:
-        return "Value: " + bin_to_float(value)
+        return f"Value: {bin_to_float(value)}"
     elif type == DataType.FLOATFLOAT:
-        return "X-Value: " + bin_to_float(value[:32]) + " | Y-Value: " + bin_to_float(value[32:])
+        return f"X-Value: {bin_to_float(value[:32])} | Y-Value: {bin_to_float(value[32:])}"
     elif type == DataType.UNSIGNED8 or type == DataType.UNSIGNED16 or type == DataType.UNSIGNED32:
-        return "Value: " + bitstring_to_int(value)
+        return f"Value: {bitstring_to_int(value)}"
     elif type == DataType.OCTETSTRING:
         text = ""
         for i in range(len(value) // 8):
