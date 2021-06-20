@@ -20,7 +20,7 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand">Profibus PA device at addresss {{device.address}}</a>
-              <form class="d-flex" action="/init_with_address" method="POST" onsubmit="loadingBtnFunction()">
+              <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
                 <input class="form-control me-2" name="Field_Address" type="number" placeholder="Address" aria-label="Search">
                 <div id="btn_container">
                   <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
@@ -55,7 +55,7 @@
         <div class="row">
         {% for block in range(len(device.slot_index_pb)): %}
         <div class="card" style="width: 18rem;" >
-          <a href="/inspect_block/?number={{block}}&type=pb" class="stretched-link"></a>
+          <a href="/inspect_block/?number={{block}}&type=pb/" class="stretched-link"></a>
           <div class="card-header">
             <b>{{block + 1}}. PB</b>
           </div>

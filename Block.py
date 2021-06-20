@@ -475,3 +475,26 @@ BlockViewAdapter = {
     TransducerBlockClassTemperature.RTD_R: BlockViewTemperatureTRParams,
     TransducerBlockClassTemperature.TC_RTD_R_DC: BlockViewTemperatureTC_RParams,
 }
+
+ViewBlockAdapter = {
+    "PhysicalBlockParentClassParams": PhysicalBlockParentClassParams,
+    "BlockViewAnalogInputParams": BlockViewAnalogInputParams,
+
+    "BlockViewTotalizerParams": BlockViewTotalizerParams,
+
+    "BlockViewFlowParams": BlockViewFlowParams,
+   
+
+    "BlockViewPressureParams": BlockViewPressureParams,
+    
+
+     "BlockViewLevelParams": BlockViewLevelParams,
+     
+
+     "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
+     "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
+     "BlockViewTemperaturePyroParams": BlockViewTemperaturePyroParams,
+     "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
+     "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
+     "BlockViewTemperatureTC_RParams": BlockViewTemperatureTC_RParams,
+}

@@ -1,3 +1,4 @@
+from typing import Dict
 from utils import *
 from scapy.all import sr1, IP, UDP, Raw
 import random
@@ -167,14 +168,18 @@ class Device:
         # print(hex(bitstring_to_int(payload)))
         return payload
     
-    def request_additional_information(self, block:str, params:dict):
+    def request_additional_information(self, block:Dict, params:dict):
+        answer_dict = {}
         for param in params:
-            offset = params[param]['offset']
-            slot = self.slot_index_pb[0]['slot']
-            index = self.slot_index_pb[0]['index']
+            offset = params[param].value['offset']
+            slot = block['slot']
+            index = block['index']
             answer = self.__request(slot, int(index)+int(offset))
-            answer = parse_response(answer, params[param]['type'])
-            print(answer)
+            if answer != None:
+                answer = parse_response(answer, params[param].value['type'])
+            answer_dict[param] = answer
+        return answer_dict
+
     
     def inspect_block(self, number: int):
         print(f"Inspecting the Block at position {number}")
@@ -194,12 +199,14 @@ class Device:
 
     def inspect_block(self, number: int, type: str) -> Block:
         block = {"slot": 0, "index": 0}
-        if type == "pb":
+        if type == "pb/" or type == "pb":
             block = self.slot_index_pb[number]
-        elif type == "tb":
+        elif type == "tb/" or type == "tb":
             block = self.slot_index_tb[number]
-        elif type == "fb":
+        elif type == "fb/" or type == "fb":
             block = self.slot_index_fb[number]
+        elif type == "lo/" or type == "lo":
+            block = self.slot_index_lo[number]    
 
         block_bit_string = self.request_block(block["slot"], block["index"])
         block = Block(block_bit_string, "bit")

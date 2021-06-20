@@ -5,7 +5,7 @@ from scapy import sessions
 from utils import *
 from Device import Device
 import argparse
-from Block import Block, BlockViewAdapter
+from Block import Block, BlockViewAdapter, ViewBlockAdapter
 import sys
 
 # Webserver
@@ -13,12 +13,14 @@ from flask import Flask, render_template, request, session
 from flask_session import Session
 
 app = Flask(__name__)
+app.debug = True
 SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)
 app.add_template_global(bitstring_to_int, name='bitstring_to_int')
 app.add_template_global(len, name='len')
 app.add_template_global(range, name='range')
+app.add_template_global(str, name="str")
 
 
 
@@ -31,14 +33,16 @@ def inspect_block():
     block_number = request.values.get('number')
     block_type = request.values.get('type')
     device = session.get('device')
-
+    print(block_number, block_type, device)
     block = device.inspect_block(int(block_number), block_type)
     print(block)
     if block.block_class in BlockViewAdapter:
         params = BlockViewAdapter[block.block_class]
     else:
         params = BlockViewAdapter[PhysicalBlockParentClass]
-    return render_template("block.html", block=block, device=device, params=params)
+    session['block'] = block
+    session['params'] = params
+    return render_template("block.html", block=block, device=device, params=params, answer = None)
 
 @app.route("/init_with_address/", methods = ['POST'])
 def data():
@@ -54,17 +58,32 @@ def data():
 
         return render_template("device.html", device=device)
 
-@app.route("/request_optional_pb/", methods = ['POST'])
+@app.route("/request_optional/", methods = ['POST'])
 def request_optional():
     form_data = request.form
+    device: Device = session.get('device')
+
     requested_params = {}
+    if form_data['type'] == 'pb/' or form_data['type'] == 'pb':
+        block = device.slot_index_pb[int(form_data['number'])]
+    if form_data['type'] == 'tb/' or form_data['type'] == 'tb':
+        block = device.slot_index_tb[int(form_data['number'])]    
+    if form_data['type'] == 'fb/' or form_data['type'] == 'fb':
+        block = device.slot_index_fb[int(form_data['number'])]
+    if form_data['type'] == 'lo/'or form_data['type'] == 'lo':
+        block = device.slot_index_lo[int(form_data['number'])]
+
     for key  in form_data.keys():
-        enum = BlockViewAdapter[PhysicalBlockParentClass]
-        requested_params[key] = enum.key.value
-    
-    device = session.get('device')
-    device.request_additional_information('pb', requested_params)
-    return "hI"
+        if key != 'type' and key != 'number':
+            block_class, param = key.split('.')
+
+            block_class = ViewBlockAdapter[block_class]
+            requested_params[param] = block_class[param]
+           
+    answer = device.request_additional_information(block, requested_params)
+    params = session.get('params')
+    block = session.get('block')
+    return render_template("block.html", block=block, device=device, params=params, answer=answer, type=form_data['type'][0:2], number=form_data['number'])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool for Profibus PA device inspection")

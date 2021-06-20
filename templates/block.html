@@ -15,6 +15,21 @@
           console.log(elmnt);
           elmnt.innerHTML = loadingBtn;
         }
+
+        function getURLParams()
+        {
+          const urlParams = new URLSearchParams(window.location.search);
+          
+            console.log(urlParams.get("number"))
+
+            if (document.getElementById('type').value === ""){
+              document.getElementById('type').value = urlParams.get("type");
+              document.getElementById('number').value = urlParams.get("number");
+            }
+
+         
+        }
+
       </script>
 
         <nav class="navbar navbar-light bg-light">
@@ -43,9 +58,27 @@
                 </ul>
               </div>
             </div>
+            {% if answer != None %}
+
+            <div class="col">
+              <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                  Parameter
+                </div>
+                <ul class="list-group list-group-flush">
+                {% for key, value in answer.items() %}
+                  <li class="list-group-item">{{key.replace('_', ' ')}}: {{value}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            </div>
+            {% endif %}
             <div class="col">
 
-              <form action="/request_optional_pb" method="POST" onsubmit="loadingBtnFunction()">
+              <form action="/request_optional/" method="POST" onsubmit="loadingBtnFunction(); getURLParams()">
+                <input type="hidden" name="type" id="type" value="{{type}}" />
+                <input type="hidden" name="number" id="number" value="{{number}}" />
+
                 <label>Optional Params:</label>
                 {% for param in params:%}     
               
