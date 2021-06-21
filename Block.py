@@ -1,6 +1,6 @@
 from TransducerBlockEnums import *
 from FunctionBlockEnums import *
-from PhysicalBlockEnums import PhysicalBlockParentClass
+from PhysicalBlockEnums import *
 from utils import DataType, DataType, bitstring_to_int
 from enum import Enum, IntEnum
 
@@ -80,7 +80,7 @@ class Block:
 
     def __parse_physical_block_head(self) -> None:
         self.parent_class = PhysicalBlockParentClass(self.parent_class_byte)
-        self.block_class = None
+        self.block_class = PhysicalBlockClass.PHYSICAL_BLOCK
 
     def __parse_function_block_head(self) -> None:
         self.parent_class = FunctionBlockParentClass(self.parent_class_byte)
@@ -120,7 +120,7 @@ class BlockViewStandardParams(Enum):
     ALARM_SUM = {"type": DataType.DS42, "offset": 7}
 
 
-class PhysicalBlockParentClassParams(Enum):
+class BlockViewPhysicalBlockParams(Enum):
     SOFTWARE_REVISION = { "type": DataType.VISIBLESTRING, "offset": 8}
     HARDWARE_REVISION = { "type": DataType.VISIBLESTRING, "offset": 9}
     DEVICE_MAN_ID = {"type": DataType.UNSIGNED16, "offset": 10}
@@ -440,7 +440,7 @@ class BlockViewFlowParams(Enum):
 
 
 BlockViewAdapter = {
-    PhysicalBlockParentClass: PhysicalBlockParentClassParams,
+    PhysicalBlockParentClass: BlockViewPhysicalBlockParams,
 
     FunctionBlockClassInput.ANALOG_INPUT: BlockViewAnalogInputParams,
 
@@ -478,8 +478,8 @@ BlockViewAdapter = {
 }
 
 def blockViewAdapting(block_class):
-    if isinstance(block_class, PhysicalBlockParentClass):
-        return PhysicalBlockParentClassParams
+    if isinstance(block_class, PhysicalBlockClass):
+        return BlockViewPhysicalBlockParams
     elif isinstance(block_class, FunctionBlockClassInput) and block_class == FunctionBlockClassInput.ANALOG_INPUT:
         return BlockViewAnalogInputParams
     elif isinstance(block_class, FunctionBlockClassCalculation) and block_class == FunctionBlockClassCalculation.TOTALISER:
@@ -509,7 +509,7 @@ def blockViewAdapting(block_class):
 
 
 ViewBlockAdapter = {
-    "PhysicalBlockParentClassParams": PhysicalBlockParentClassParams,
+    "BlockViewPhysicalBlockParams": BlockViewPhysicalBlockParams,
     "BlockViewAnalogInputParams": BlockViewAnalogInputParams,
 
     "BlockViewTotalizerParams": BlockViewTotalizerParams,
