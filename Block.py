@@ -121,7 +121,7 @@ class BlockViewStandardParams(Enum):
 
 
 class PhysicalBlockParentClassParams(Enum):
-    SOFTWARE_REVESION = { "type": DataType.VISIBLESTRING, "offset": 8}
+    SOFTWARE_REVISION = { "type": DataType.VISIBLESTRING, "offset": 8}
     HARDWARE_REVISION = { "type": DataType.VISIBLESTRING, "offset": 9}
     DEVICE_MAN_ID = {"type": DataType.UNSIGNED16, "offset": 10}
     DEVICE_ID =   { "type": DataType.VISIBLESTRING,  "offset": 11}
