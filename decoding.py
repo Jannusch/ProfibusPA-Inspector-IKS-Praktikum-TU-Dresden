@@ -19,7 +19,7 @@ def parse_response(value: str, type: DataType) -> str:
         for i in range(len(value) // 8):
             asc_val = bitstring_to_int(value[8 * i:8 * i + 8])
             text = text + chr(asc_val)
-        return "String: " + text
+        return f"String: {text}"
     elif type == DataType.DS32:
         return str(Block(value))
     elif type == DataType.DS36:
@@ -29,19 +29,19 @@ def parse_response(value: str, type: DataType) -> str:
         dec_p = bitstring_to_int(value[81:])
         if value[80] == "1":
             dec_p = dec_p * -1
-        return "EU at 100%: " + eu100 + " | EU at 0%: " + eu0 + " | Units Index: " + u_index + " | Decimal Point: " + dec_p
+        return f"EU at 100%: {eu100} | EU at 0%: {eu0}  | Units Index: {u_index} | Decimal Point: {dec_p}"
     elif type == DataType.DS37:
         actual = bitstring_to_int(value[:8])
         permitted = bitstring_to_int(value[8:16])
         normal = bitstring_to_int(value[16:])
-        return "Actual: " + actual + " | Permitted: " + permitted + " | Normal: " + normal
+        return f"Actual:  {actual}  | Permitted:  {permitted}  | Normal:  {normal}"
     elif type == DataType.DS39:
         unack = bitstring_to_int(value[:8])
         a_state = bitstring_to_int(value[8:16])
         timestamp = bitstring_to_int(value[16:80])
         subcode = bitstring_to_int(value[80:96])
-        val = bin_to_float(value[86:])
-        return "Unacknowledged: " + unack + " | Alarm State: " + a_state + " | Timestamp: " + timestamp + " | Subcode: " + subcode + " | Value: " + val
+        val = bin_to_float(value[96:])
+        return f"Unacknowledged: {unack} | Alarm State:  {a_state}  | Timestamp:  {timestamp}  | Subcode: {subcode} | Value: {val}"
     elif type == DataType.DS42:
         alarms = []
         if value[0] == "1":

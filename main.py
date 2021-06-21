@@ -5,7 +5,7 @@ from scapy import sessions
 from utils import *
 from Device import Device
 import argparse
-from Block import Block, BlockViewAdapter, ViewBlockAdapter
+from Block import Block, BlockViewAdapter, ViewBlockAdapter, blockViewAdapting
 import sys
 
 # Webserver
@@ -36,10 +36,11 @@ def inspect_block():
     print(block_number, block_type, device)
     block = device.inspect_block(int(block_number), block_type)
     print(block)
-    if block.block_class in BlockViewAdapter:
-        params = BlockViewAdapter[block.block_class]
-    else:
+
+    params = blockViewAdapting(block.block_class)
+    if params == None:
         params = BlockViewAdapter[PhysicalBlockParentClass]
+    
     session['block'] = block
     session['params'] = params
     return render_template("block.html", block=block, device=device, params=params, answer = None)

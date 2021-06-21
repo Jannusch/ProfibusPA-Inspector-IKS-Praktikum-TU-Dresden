@@ -44,8 +44,8 @@ class DataType(IntEnum):
 
 def bin_to_float(b):
     """ Convert binary string to a float. """
-    bf = int_to_bytes(int(b, 2), 8)  # 8 bytes needed for IEEE 754 binary64.
-    return struct.unpack('>d', bf)[0]
+    bf = int(b, 2).to_bytes(4, "big")  # 8 bytes needed for IEEE 754 binary64.
+    return struct.unpack('>f', bf)[0]
 
 # https://stackoverflow.com/a/8762541
 # https://creativecommons.org/licenses/by-sa/4.0/
