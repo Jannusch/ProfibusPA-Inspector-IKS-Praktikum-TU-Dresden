@@ -1,7 +1,9 @@
+from typing import Dict
 from utils import *
 from scapy.all import sr1, IP, UDP, Raw
 import random
 from Block import Block
+from decoding import parse_response
 
 class Device_Header:
     def __init__(self, bitstring: str):
@@ -69,12 +71,13 @@ class Device:
     # make request to remote proxy via scapy stacking and show answer payload
     def request_composit_list_directory(self):
         bitstring = self.__request(0x01, 0x01)
+        # print(hex(bitstring_to_int(bitstring)))
 
         # Physical Block
         self.begin_pb = bitstring[0:16]
         self.no_pb = bitstring[16:32]
         
-        # print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[8:16]))
+        # print("0: ", hex(bitstring_to_int(bitstring)), "0.1: ", bitstring_to_int(self.begin_pb[0:8]))
 
 
         if bitstring_to_int(self.begin_pb[0:8]) == 1:
@@ -138,7 +141,10 @@ class Device:
                 print(f"{i + 1}. FB:\n\tSlot:\t{self.slot_index_fb[i]['slot']}\n\tIndex:\t{self.slot_index_fb[i]['index']}\n\tNumber:\t{self.slot_index_fb[i]['number']}")
             for i in range(0,len(self.slot_index_lo)):
                 print(f"{i + 1}. LO:\n\tSlot:\t{self.slot_index_lo[i]['slot']}\n\tIndex:\t{self.slot_index_lo[i]['index']}\n\tNumber:\t{self.slot_index_lo[i]['number']}")
-
+        
+        if self.address == 7:
+            self.slot_index_pb[0]['index'] = self.slot_index_pb[0]['index'] + 100
+            
     # does the request over UDP and returns bitstring
     def __request(self, slot:int, index:int):
         for x in range(3):
@@ -165,6 +171,19 @@ class Device:
         # print(hex(bitstring_to_int(payload)))
         return payload
     
+    def request_additional_information(self, block:Dict, params:dict):
+        answer_dict = {}
+        for param in params:
+            offset = params[param].value['offset']
+            slot = block['slot']
+            index = block['index']
+            answer = self.__request(slot, int(index)+int(offset))
+            if answer != None:
+                answer = parse_response(answer, params[param].value['type'])
+            answer_dict[param] = answer
+        return answer_dict
+
+    
     def inspect_block(self, number: int):
         print(f"Inspecting the Block at position {number}")
         block = {"slot": 0, "index": 0}
@@ -183,12 +202,14 @@ class Device:
 
     def inspect_block(self, number: int, type: str) -> Block:
         block = {"slot": 0, "index": 0}
-        if type == "pb":
+        if type == "pb/" or type == "pb":
             block = self.slot_index_pb[number]
-        elif type == "tb":
+        elif type == "tb/" or type == "tb":
             block = self.slot_index_tb[number]
-        elif type == "fb":
+        elif type == "fb/" or type == "fb":
             block = self.slot_index_fb[number]
+        elif type == "lo/" or type == "lo":
+            block = self.slot_index_lo[number]    
 
         block_bit_string = self.request_block(block["slot"], block["index"])
         block = Block(block_bit_string, "bit")

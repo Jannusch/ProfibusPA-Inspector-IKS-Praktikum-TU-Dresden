@@ -7,26 +7,96 @@
     </head>
     <body>
         
+      <script>
+        var loadingBtn = '<button style="width: 8rem;" class="btn btn-primary" type="button" disabled><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Loading...</button>'
+        function loadingBtnFunction()
+        {
+          var elmnt = document.getElementById("btn_container");
+          console.log(elmnt);
+          elmnt.innerHTML = loadingBtn;
+        }
+
+        function getURLParams()
+        {
+          const urlParams = new URLSearchParams(window.location.search);
+          
+            console.log(urlParams.get("number"))
+
+            if (document.getElementById('type').value === ""){
+              document.getElementById('type').value = urlParams.get("type");
+              document.getElementById('number').value = urlParams.get("number");
+            }
+
+         
+        }
+
+      </script>
 
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand">Inspect PROFIBUS PA device at address  {{device.address}}</a>
-              <form class="d-flex" action="/init_with_address" method="POST">
+              <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
                 <input class="form-control me-2" type="number" name="Field_Address" placeholder="Address" aria-label="Inspect">
-                <button class="btn btn-outline-success" type="submit">Inspect</button>
+                <div id="btn_container">
+                  <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
+                </div>
               </form>
             </div>
           </nav>
-
-          <div class="card" style="width: 18rem;">
-            <div class="card-header">
-              Block
+          
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+              <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                  Block
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Block Type: {{block.block_type.name}}</li>
+                  <li class="list-group-item">Parent Class: {{block.parent_class.name}}</li>
+                  <li class="list-group-item">Block Class: {{block.block_class.name}}</li>
+                </ul>
+              </div>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">Block Type: {{block.block_type.name}}</li>
-              </ul>
-          </div>
+            {% if answer != None %}
 
+            <div class="col">
+              <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                  Parameter
+                </div>
+                <ul class="list-group list-group-flush">
+                {% for key, value in answer.items() %}
+                  <li class="list-group-item">{{key.replace('_', ' ')}}: {{value}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            </div>
+            {% endif %}
+            <div class="col">
+
+              <form action="/request_optional/" method="POST" onsubmit="loadingBtnFunction(); getURLParams()">
+                <input type="hidden" name="type" id="type" value="{{type}}" />
+                <input type="hidden" name="number" id="number" value="{{number}}" />
+
+                <label>Optional Params:</label>
+                {% for param in params:%}     
+              
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"  name="{{param}}" id="{{param}}">
+                  <label class="form-check-label" for="{{param}}">
+                    {{param.name.replace('_', ' ')}}
+                  </label>
+                </div> 
+                {% endfor %}
+              
+                <button style="width: 8rem;" id="submit_btn" type="submit" class="btn btn-primary">Inspect</button>
+              
+              </form>
+            
+            </div>
+        </div>
+        </div>
 
     </body>
 </html>

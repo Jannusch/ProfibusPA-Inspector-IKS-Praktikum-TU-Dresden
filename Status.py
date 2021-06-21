@@ -71,7 +71,7 @@ class Status:
     def __init__(self, bytz, type:str="bit") -> None:
         if type == "hex" and isinstance(bytz, str) and len(bytz) == 2:
             self.bits = bin(int(bytz, 16))[2:]
-        elif type == "bin" and isinstance(bytz, str) and len(bytz) == 8:
+        elif type == "bit" and isinstance(bytz, str) and len(bytz) == 8:
             self.bits = bytz
         elif isinstance(bytz, int):
             self.bits = bin(bytz)[2:]
