@@ -141,7 +141,10 @@ class Device:
                 print(f"{i + 1}. FB:\n\tSlot:\t{self.slot_index_fb[i]['slot']}\n\tIndex:\t{self.slot_index_fb[i]['index']}\n\tNumber:\t{self.slot_index_fb[i]['number']}")
             for i in range(0,len(self.slot_index_lo)):
                 print(f"{i + 1}. LO:\n\tSlot:\t{self.slot_index_lo[i]['slot']}\n\tIndex:\t{self.slot_index_lo[i]['index']}\n\tNumber:\t{self.slot_index_lo[i]['number']}")
-
+        
+        if self.address == 7:
+            self.slot_index_pb[0]['index'] = self.slot_index_pb[0]['index'] + 100
+            
     # does the request over UDP and returns bitstring
     def __request(self, slot:int, index:int):
         for x in range(3):

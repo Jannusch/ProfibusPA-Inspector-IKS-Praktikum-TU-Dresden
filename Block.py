@@ -160,7 +160,7 @@ class BlockViewAnalogInputParams(Enum):
     HI_ALM = {"type": DataType.DS39, "offset": 31}
     LO_ALM = {"type": DataType.DS39, "offset": 32}
     LO_LO_ALM = {"type": DataType.DS39, "offset": 33}
-    SIMULATE = {"type": DataType.DS39, "offset": 34}
+    SIMULATE = {"type": DataType.DS50, "offset": 34}
     OUT_UNIT_TEXT = {"type": DataType.OCTETSTRING, "offset": 35}
 
 

@@ -35,7 +35,7 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand">Inspect PROFIBUS PA device at address  {{device.address}}</a>
-              <form class="d-flex" action="/init_with_address" method="POST" onsubmit="loadingBtnFunction()">
+              <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
                 <input class="form-control me-2" type="number" name="Field_Address" placeholder="Address" aria-label="Inspect">
                 <div id="btn_container">
                   <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
