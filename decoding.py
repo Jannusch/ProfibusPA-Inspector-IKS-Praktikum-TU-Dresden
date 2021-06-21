@@ -57,3 +57,8 @@ def parse_response(value: str, type: DataType) -> str:
         if value[7] == "1":
             alarms.append("Update Event")
         return ",".join(alarms)
+    elif type == DataType.DS50:
+        sim_stat = Status(value[:8]).quality.name
+        sim_val = bin_to_float(value[8:40])
+        sim_enabled = bitstring_to_int(value[40:]) > 0
+        return f"Simulate Status: {sim_stat} | Simulate Value: {sim_val} | Simulate Enabled: {sim_enabled}"
