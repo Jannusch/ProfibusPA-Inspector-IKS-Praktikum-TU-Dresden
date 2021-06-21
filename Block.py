@@ -31,7 +31,8 @@ class Block:
         elif isinstance(bytz, int):
             self.raw_bytes_s = [char for char in hex(bytz)[2:].rjust(40, "0")]
         else:
-            raise AttributeError()
+            self.block_object_byte = 128
+            return
 
         self.raw_bytes_s = ''.join(self.raw_bytes_s)
         self.raw_bytes = []
