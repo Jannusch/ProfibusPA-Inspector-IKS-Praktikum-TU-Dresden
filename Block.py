@@ -66,7 +66,7 @@ class Block:
         self.no_of_views = self.raw_bytes[19] # byte 20
 
     def __str__(self) -> str:
-        print(self.__print_block_params())
+        # print(self.__print_block_params())
         return(f"""Blocktype: \t\t{self.block_type.name}\nNumber of params: \t{self.no_of_parameters}""")
 
     def __parse_block_head(self) -> None:
@@ -104,9 +104,7 @@ class Block:
             except ValueError:
                 self.block_class = TransducerBlockClass.RESERVED
 
-    def __print_block_params(self) -> None:
-        params = self.parent_class.PARAMS
-        print(params.value.keys())
+
 
 
 class BlockViewStandardParams(Enum):
