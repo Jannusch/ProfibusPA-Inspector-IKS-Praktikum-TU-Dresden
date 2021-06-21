@@ -441,6 +441,7 @@ class BlockViewFlowParams(Enum):
 
 BlockViewAdapter = {
     PhysicalBlockParentClass: PhysicalBlockParentClassParams,
+
     FunctionBlockClassInput.ANALOG_INPUT: BlockViewAnalogInputParams,
 
     FunctionBlockClassCalculation.TOTALISER: BlockViewTotalizerParams,
@@ -476,6 +477,37 @@ BlockViewAdapter = {
     TransducerBlockClassTemperature.TC_RTD_R_DC: BlockViewTemperatureTC_RParams,
 }
 
+def blockViewAdapting(block_class):
+    if isinstance(block_class, PhysicalBlockParentClass):
+        return PhysicalBlockParentClassParams
+    elif isinstance(block_class, FunctionBlockClassInput) and block_class == FunctionBlockClassInput.ANALOG_INPUT:
+        return BlockViewAnalogInputParams
+    elif isinstance(block_class, FunctionBlockClassCalculation) and block_class == FunctionBlockClassCalculation.TOTALISER:
+        return BlockViewTotalizerParams
+    elif isinstance(block_class, TransducerBlockClassFlow):
+        return BlockViewFlowParams
+    elif isinstance(block_class, TransducerBlockClassPressure):
+        return BlockViewPressureParams
+    elif isinstance(block_class, TransducerBlockClassLevel):
+        return BlockViewLevelParams
+    elif isinstance(block_class, TransducerBlockClassTemperature):
+        adapter = {
+            TransducerBlockClassTemperature.THERMOCOUPLE: BlockViewTemperatureTCParams,
+            TransducerBlockClassTemperature.TC: BlockViewTemperatureTCParams,
+            TransducerBlockClassTemperature.RESISTANCE_THERMOMETER: BlockViewTemperatureTRParams,
+            TransducerBlockClassTemperature.RTD: BlockViewTemperatureTRParams,
+            TransducerBlockClassTemperature.PYROMETER: BlockViewTemperaturePyroParams,
+            TransducerBlockClassTemperature.TC_DC: BlockViewTemperatureTCParams,
+            TransducerBlockClassTemperature.RTD_R: BlockViewTemperatureTRParams,
+            TransducerBlockClassTemperature.TC_RTD_R_DC: BlockViewTemperatureTC_RParams
+        }
+        if block_class in adapter:
+            return adapter[block_class]
+        else:
+            return None
+    return None
+
+
 ViewBlockAdapter = {
     "PhysicalBlockParentClassParams": PhysicalBlockParentClassParams,
     "BlockViewAnalogInputParams": BlockViewAnalogInputParams,
@@ -483,18 +515,15 @@ ViewBlockAdapter = {
     "BlockViewTotalizerParams": BlockViewTotalizerParams,
 
     "BlockViewFlowParams": BlockViewFlowParams,
-   
 
     "BlockViewPressureParams": BlockViewPressureParams,
     
-
-     "BlockViewLevelParams": BlockViewLevelParams,
+    "BlockViewLevelParams": BlockViewLevelParams,
      
-
-     "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
-     "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
-     "BlockViewTemperaturePyroParams": BlockViewTemperaturePyroParams,
-     "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
-     "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
-     "BlockViewTemperatureTC_RParams": BlockViewTemperatureTC_RParams,
+    "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
+    "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
+    "BlockViewTemperaturePyroParams": BlockViewTemperaturePyroParams,
+    "BlockViewTemperatureTCParams": BlockViewTemperatureTCParams,
+    "BlockViewTemperatureTRParams": BlockViewTemperatureTRParams,
+    "BlockViewTemperatureTC_RParams": BlockViewTemperatureTC_RParams,
 }
