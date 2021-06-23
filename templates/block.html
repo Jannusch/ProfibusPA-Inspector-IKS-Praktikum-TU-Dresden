@@ -3,10 +3,78 @@
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <title>PROFIBus PA Inspector</title>
     </head>
     <body>
+        <!-- source : https://bootstrapious.com/p/bootstrap-sidebar -->
         
+      <style>
+        .wrapper {
+          display: flex;
+          width: 100%;
+          align-items: stretch;
+        }
+        #sidebar {
+          min-width: 350px;
+          max-width: 350px;
+          min-height: 100vh;
+          transition: all 0.3s;
+          background: #f8f8fa;
+          color: #000000;
+
+        }
+        #sidebar.active {
+          margin-left: -350px;
+        }
+
+        #sidebar ul.components {
+            padding: 20px 0;
+            border-bottom: 1px solid #198754;
+        }
+
+        #sidebar ul p {
+            color: #fff;
+            padding: 10px;
+        }
+
+        #sidebar ul li a {
+            padding: 10px;
+            font-size: 1.1em;
+            display: block;
+        }
+        #sidebar ul li a:hover {
+            color: #fff;
+            background: #198754;
+        }
+
+        #sidebar ul li.active > a, a[aria-expanded="true"] {
+            color: #fff;
+            background: #198754;
+        }
+        ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: #d3d3d4;
+        }
+
+        a[data-bs-toggle="collapse"] {
+          position: relative;
+        }
+
+        a:link {
+          color: rgb(0, 0, 0);
+          text-decoration: none;
+        }
+
+        a:visited {
+          color: rgb(0, 0, 0);
+          text-decoration: none;
+        }
+
+        
+      </style>
       <script>
         var loadingBtn = '<button style="width: 8rem;" class="btn btn-primary" type="button" disabled><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Loading...</button>'
         function loadingBtnFunction()
@@ -30,73 +98,145 @@
          
         }
 
+        $(document).ready(function () {
+          $('#sidebarCollapse').on('click', function () {
+          $('#sidebar').toggleClass('active');
+          });
+        }); 
+
       </script>
 
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-              <a class="navbar-brand">Inspect PROFIBUS PA device at address  {{device.address}}</a>
-              <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
-                <input class="form-control me-2" type="number" name="Field_Address" placeholder="Address" aria-label="Inspect">
-                <div id="btn_container">
-                  <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
-                </div>
-              </form>
-            </div>
-          </nav>
-          
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-              <div class="card" style="width: 18rem;">
-                <div class="card-header">
-                  Block
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Block Type: {{block.block_type.name}}</li>
-                  <li class="list-group-item">Parent Class: {{block.parent_class.name}}</li>
-                  <li class="list-group-item">Block Class: {{block.block_class.name}}</li>
-                </ul>
-              </div>
-            </div>
-            {% if answer != None %}
 
-            <div class="col">
-              <div class="card" style="width: 18rem;">
-                <div class="card-header">
-                  Parameter
-                </div>
-                <ul class="list-group list-group-flush">
-                {% for key, value in answer.items() %}
-                  <li class="list-group-item">{{key.replace('_', ' ')}}: {{value}}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            </div>
-            {% endif %}
-            <div class="col">
+<div class="wrapper">
+  <nav id="sidebar" class="active">
+    <div class="sidebar-header">
+      <h3>Profibus PA Inspector</h3>
+    </div>
 
-              <form action="/request_optional/" method="POST" onsubmit="loadingBtnFunction(); getURLParams()">
-                <input type="hidden" name="type" id="type" value="{{type}}" />
-                <input type="hidden" name="number" id="number" value="{{number}}" />
+    <ul class="list-unstyled components">
+      <li class="active">
+        <a href="#pbSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Physical Blocks</a>
+        <ul class="collapse list-unstyled" id="pbSubmenu">
+          {% for block in range(len(device.slot_index_pb)): %}
+          <li>
+            <a href="/inspect_block/?number={{block}}&type=pb/">{{block + 1}}. PB</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
 
-                <label>Optional Params:</label>
-                {% for param in params:%}     
-              
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox"  name="{{param}}" id="{{param}}">
-                  <label class="form-check-label" for="{{param}}">
-                    {{param.name.replace('_', ' ')}}
-                  </label>
-                </div> 
-                {% endfor %}
-              
-                <button style="width: 8rem;" id="submit_btn" type="submit" class="btn btn-primary">Inspect</button>
-              
-              </form>
-            
+      <li>
+        <a href="#tbSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transducer Block</a>
+        <ul class="collapse list-unstyled" id="tbSubmenu">
+          {% for block in range(len(device.slot_index_tb)): %}
+          <li>
+            <a href="/inspect_block/?number={{block}}&type=tb/">{{block + 1}}. TB</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+
+    <li>
+      <a href="#fbSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Function Block</a>
+      <ul class="collapse list-unstyled" id="fbSubmenu">
+        {% for block in range(len(device.slot_index_fb)): %}
+        <li>
+          <a href="/inspect_block/?number={{block}}&type=fb/">{{block + 1}}. FB</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+
+    {% if len(device.slot_index_lo) != 0 %}
+    <li>
+      <a href="#loSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Linked Objects</a>
+      <ul class="collapse list-unstyled" id="loSubmenu">
+        {% for block in range(len(device.slot_index_lo)): %}
+        <li>
+          <a href="/inspect_block/?number={{block}}&type=lo/">{{block + 1}}. LO</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endif %}
+  </ul>
+
+  </nav>
+
+  <div id="content" style="width: 100%;">
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        
+        <a class="navbar-brand" id="sidebarCollapse">Inspect PROFIBUS PA device at address  {{device.address}}</a>
+        
+          <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
+            <input class="form-control me-2" type="number" name="Field_Address" placeholder="Address" aria-label="Inspect">
+            <div id="btn_container">
+              <button style="width: 8rem;" class="btn btn-outline-success" type="submit" >Inspect</button>
             </div>
+          </form>
+        
+      </div>
+    </nav>
+    
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col" style="width: 20rem;">
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            Block
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Block Type: {{block.block_type.name}}</li>
+            <li class="list-group-item">Parent Class: {{block.parent_class.name}}</li>
+            <li class="list-group-item">Block Class: {{block.block_class.name}}</li>
+          </ul>
         </div>
-        </div>
+      </div>
+      <div class="col" style="width: 20rem;">
+
+      {% if answer != None %}
+
+        <div class="card" style="width: 18rem;">
+          <div class="card-header">
+            Parameter
+          </div>
+          <ul class="list-group list-group-flush">
+          {% for key, value in answer.items() %}
+            <li class="list-group-item">{{key.replace('_', ' ')}}: {{value}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+      <div class="col" style="width: 20rem;">
+
+        <form action="/request_optional/" method="POST" onsubmit="loadingBtnFunction(); getURLParams()">
+          <input type="hidden" name="type" id="type" value="{{type}}" />
+          <input type="hidden" name="number" id="number" value="{{number}}" />
+
+          <label>Optional Params:</label>
+          {% for param in params:%}     
+        
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"  name="{{param}}" id="{{param}}">
+            <label class="form-check-label" for="{{param}}">
+              {{param.name.replace('_', ' ')}}
+            </label>
+          </div> 
+          {% endfor %}
+        
+          <button style="width: 8rem;" id="submit_btn" type="submit" class="btn btn-primary">Inspect</button>
+        
+        </form>
+      
+      </div>
+  </div>
+  </div>
+  </div>
+</div>
+
 
     </body>
 </html>
