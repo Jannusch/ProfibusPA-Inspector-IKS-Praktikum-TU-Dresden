@@ -39,7 +39,7 @@ def inspect_block():
 
     params = blockViewAdapting(block.block_class)
     if params == None:
-        params = BlockViewAdapter[PhysicalBlockParentClass]
+        params = {}
     
     session['block'] = block
     session['params'] = params
