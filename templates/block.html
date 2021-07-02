@@ -73,7 +73,35 @@
           text-decoration: none;
         }
 
-        
+        #sidebarCollapse {
+            width: 40px;
+            height: 40px;
+            background: #aeaeae;
+        }
+
+        #sidebarCollapse span {
+            width: 85%;
+            height: 2px;
+            margin: 5px auto;
+            display: block;
+            background: #757575;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #sidebarCollapse.borgarCross span:nth-of-type(1) {
+            transform: rotate(45deg) translate(2px, 2px);
+            margin: 0;
+        }
+
+        #sidebarCollapse.borgarCross span:nth-of-type(2) {
+            opacity: 0;
+            margin: 0;
+        }
+
+        #sidebarCollapse.borgarCross span:nth-of-type(3) {
+            transform: rotate(-45deg) translate(1px, -1px);
+            margin: 0;
+        }
       </style>
       <script>
         var loadingBtn = '<button style="width: 8rem;" class="btn btn-primary" type="button" disabled><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Loading...</button>'
@@ -100,7 +128,8 @@
 
         $(document).ready(function () {
           $('#sidebarCollapse').on('click', function () {
-          $('#sidebar').toggleClass('active');
+            $(this).toggleClass('borgarCross');
+            $('#sidebar').toggleClass('active');
           });
         }); 
 
@@ -166,8 +195,13 @@
   <div id="content" style="width: 100%;">
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
+          <button type="button" id="sidebarCollapse" class="btn btn-info">
+              <span></span>
+              <span></span>
+              <span></span>
+          </button>
         
-        <a class="navbar-brand" id="sidebarCollapse">Inspect PROFIBUS PA device at address  {{device.address}}</a>
+        <a class="navbar-brand">Inspect PROFIBUS PA device at address  {{device.address}}</a>
         
           <form class="d-flex" action="/init_with_address/" method="POST" onsubmit="loadingBtnFunction()">
             <input class="form-control me-2" type="number" name="Field_Address" placeholder="Address" aria-label="Inspect">
