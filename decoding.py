@@ -1,3 +1,4 @@
+from Units import Unit
 from utils import *
 from Block import Block
 from Status import Status
@@ -26,10 +27,11 @@ def parse_response(value: str, type: DataType) -> str:
         eu100 = bin_to_float(value[:32])
         eu0 = bin_to_float(value[32:64])
         u_index = bitstring_to_int(value[64:80])
+        u = Unit(u_index)
         dec_p = bitstring_to_int(value[81:])
         if value[80] == "1":
             dec_p = dec_p * -1
-        return f"EU at 100%: {eu100} | EU at 0%: {eu0}  | Units Index: {u_index} | Decimal Point: {dec_p}"
+        return f"EU at 100%: {eu100} | EU at 0%: {eu0}  | Unit: {u.symbol} | Decimal Point: {dec_p}"
     elif type == DataType.DS37:
         actual = bitstring_to_int(value[:8])
         permitted = bitstring_to_int(value[8:16])
@@ -62,3 +64,7 @@ def parse_response(value: str, type: DataType) -> str:
         sim_val = bin_to_float(value[8:40])
         sim_enabled = bitstring_to_int(value[40:]) > 0
         return f"Simulate Status: {sim_stat} | Simulate Value: {sim_val} | Simulate Enabled: {sim_enabled}"
+    elif type == DataType.UNIT:
+        idx = bitstring_to_int(value)
+        u = Unit(idx)
+        return f"Unit: {u}"

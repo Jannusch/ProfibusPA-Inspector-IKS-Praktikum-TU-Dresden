@@ -36,6 +36,7 @@ class DataType(IntEnum):
     UNSIGNED32 = 23
     FLOATFLOAT = 24
     VISIBLESTRING = 25
+    UNIT = 128
 
 
 # https://stackoverflow.com/a/8762541
